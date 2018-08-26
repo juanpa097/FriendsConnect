@@ -1,3 +1,7 @@
-#   from django.test import TestCase
+from django.test import TestCase
 
-# Create your tests here.
+
+class DummyTest(TestCase):
+
+    def test_travis(self):
+        self.assertEqual('Hello', 'Hello')
