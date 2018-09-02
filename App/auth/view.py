@@ -6,14 +6,16 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from datetime import datetime
 
+
 class ObtainExpiringAuthToken(ObtainAuthToken):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
-
-            token, created = Token.objects.get_or_create(user=serializer.validated_data['user'])
+            token, created = Token.objects.get_or_create(
+                user=serializer.validated_data['user']
+            )
 
             if not created:
                 token.created = datetime.utcnow()
