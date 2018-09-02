@@ -1,3 +1,4 @@
-# from django.shortcuts import render
+#   from django.shortcuts import render
+from App.user.view import UserViewSet
 
-# Create your views here.
+user = UserViewSet.as_view(dict(post='create'))
