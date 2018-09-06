@@ -1,11 +1,11 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.response import Response
-from django.db.models import ProtectedError
 
 
 from App.image.model import Image
 from App.image.serializer import ImageSerializer
+
 
 class ImageViewSet(viewsets.ViewSet):
 
@@ -60,5 +60,3 @@ class ImageViewSet(viewsets.ViewSet):
             image_serializer.data,
             status=status.HTTP_200_OK
         )
-
-

@@ -1,7 +1,6 @@
-import  base64
-
 from rest_framework import serializers
 from App.image.model import Image
+
 
 class ImageSerializer(serializers.ModelSerializer):
 

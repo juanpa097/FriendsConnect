@@ -11,5 +11,5 @@ class UserModel(models.Model):
     about_me = models.CharField(max_length=200)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # TODO Check if changue default, how to make the relation, if defalt photo
-    #image = models.OneToOneField(
-    #    default=1, to=Image)
+    #  image = models.OneToOneField(
+    #   default=1, to=Image)
