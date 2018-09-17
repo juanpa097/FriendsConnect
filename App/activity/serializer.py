@@ -11,7 +11,7 @@ class ActivitySerializer(serializers.ModelSerializer):
         fields = '__all__'
         # fields = ('name', 'description')
 
-    def create(self, validate_data):
-        return Activity.objects.create(**validate_data)
+   ## def create(self, validate_data):
+     ##   return Activity.objects.create(**validate_data)
 
 
