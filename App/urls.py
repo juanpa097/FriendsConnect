@@ -1,12 +1,12 @@
-from django.urls import path
+import django.urls
 from . import views
 
 
 handler404 = 'views.page_not_found'
 
 urlpatterns = [
-    path('user/', views.user),
-    path('login/', views.auth),
-    path('activity/', views.activity),
-    path('activity/<int:id>/', views.activity)
+    django.urls.path('user/', views.user),
+    django.urls.path('login/', views.auth),
+    django.urls.path('activity/', views.activity2),
+    django.urls.path('activity/<int:pk>', views.activity)
 ]

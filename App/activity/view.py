@@ -6,7 +6,8 @@ from App.activity.serializer import ActivitySerializer
 
 
 class ActivityView(viewsets.ViewSet):
-    def create(self, request):
+    @staticmethod
+    def create(request):
         activity_serializer = ActivitySerializer(data=request.data)
         if activity_serializer.is_valid():
             activity_serializer.create(request.data)
@@ -19,33 +20,28 @@ class ActivityView(viewsets.ViewSet):
             status=status.HTTP_200_OK
         )
 
-<<<<<<< HEAD
-
-=======
-    ##  @api_view(['GET', 'POST'])
->>>>>>> parent of 39a71ad... Activity v1.0
-    def Activity_list(self, request):
+    @staticmethod
+    def activity_list(request):
         if request.method == 'GET':
             activities = Activity.objects.all()
             activity_serializer = ActivitySerializer(activities, many=True)
             return Response(activity_serializer.data)
 
-    ##  @api_view(['GET', 'PUT', 'DELETE'])
+    @staticmethod
     def activity_exact(request, pk):
-        """
-        Retrieve, update or delete a snippet instance.
-        """
-
         try:
+            print("pipiLoco was hereeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
             activity = Activity.objects.get(pk=pk)
         except Activity.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         if request.method == 'GET':
+            print("GET pipiLoco was hereeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
             activity_serializer = ActivitySerializer(activity)
             return Response(activity_serializer.data)
 
         elif request.method == 'PUT':
+            print("PUT pipiLoco was hereeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
             activity_serializer = ActivitySerializer(activity, data=request.data)
             if activity_serializer.is_valid():
                 activity_serializer.save()
@@ -53,5 +49,6 @@ class ActivityView(viewsets.ViewSet):
             return Response(activity_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         elif request.method == 'DELETE':
+            print("DELETE pipiLoco was hereeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
             activity.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
