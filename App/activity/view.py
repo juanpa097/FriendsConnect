@@ -19,6 +19,7 @@ class ActivityView(viewsets.ViewSet):
             status=status.HTTP_200_OK
         )
 
+
     def Activity_list(self, request):
         if request.method == 'GET':
             activities = Activity.objects.all()

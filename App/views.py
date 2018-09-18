@@ -8,3 +8,4 @@ user = UserViewSet.as_view(dict(post='create', get='get_all_user'))
 auth = ObtainExpiringAuthToken.as_view()
 activity = ActivityView.as_view(
     {'post': 'create', 'get': 'Activity_list', 'put': 'activity_exact', 'delete': 'activity_exact'})
+
