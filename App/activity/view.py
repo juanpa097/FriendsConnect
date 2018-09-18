@@ -19,16 +19,25 @@ class ActivityView(viewsets.ViewSet):
             status=status.HTTP_200_OK
         )
 
+<<<<<<< HEAD
 
+=======
+    ##  @api_view(['GET', 'POST'])
+>>>>>>> parent of 39a71ad... Activity v1.0
     def Activity_list(self, request):
         if request.method == 'GET':
             activities = Activity.objects.all()
             activity_serializer = ActivitySerializer(activities, many=True)
             return Response(activity_serializer.data)
 
+    ##  @api_view(['GET', 'PUT', 'DELETE'])
     def activity_exact(request, pk):
+        """
+        Retrieve, update or delete a snippet instance.
+        """
+
         try:
-            activity = Activity.objects.get(pk=int(pk))
+            activity = Activity.objects.get(pk=pk)
         except Activity.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
