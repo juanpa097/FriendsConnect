@@ -6,23 +6,30 @@ from App.activity.serializer import ActivitySerializer
 
 
 class ActivityView(viewsets.ViewSet):
-    @staticmethod
-    def create(request):
+    def create(self, request):
         activity_serializer = ActivitySerializer(data=request.data)
         if activity_serializer.is_valid():
             activity_serializer.create(request.data)
             return Response(activity_serializer.data, status=status.HTTP_201_CREATED)
         return Response(activity_serializer.errors, status=status.HTTP_200_OK)
 
-    @staticmethod
-    def activity_list(request):
+<<<<<<< HEAD
+
+=======
+    ##  @api_view(['GET', 'POST'])
+>>>>>>> parent of 39a71ad... Activity v1.0
+    def Activity_list(self, request):
         if request.method == 'GET':
             activities = Activity.objects.all()
             activity_serializer = ActivitySerializer(activities, many=True)
             return Response(activity_serializer.data, status=status.HTTP_202_ACCEPTED)
 
-    @staticmethod
+    ##  @api_view(['GET', 'PUT', 'DELETE'])
     def activity_exact(request, pk):
+        """
+        Retrieve, update or delete a snippet instance.
+        """
+
         try:
             activity = Activity.objects.get(pk=pk)
         except Activity.DoesNotExist:
