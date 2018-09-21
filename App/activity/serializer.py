@@ -8,10 +8,5 @@ class ActivitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Activity
-        fields = '__all__'
-        # fields = ('name', 'description')
-
-    ##def create(self, validate_data):
-      ##  return Activity.objects.create(**validate_data)
-
+        fields = ('name', 'description', 'location', 'due_date', 'max_participants', 'visibility', 'User_Activity_id')
 

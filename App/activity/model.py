@@ -10,4 +10,4 @@ class Activity(models.Model):
     due_date = models.DateTimeField()
     max_participants = models.IntegerField()
     visibility = models.BooleanField()
-    #User_Activity_id = models.IntegerField()
+    User_Activity_id = models.ForeignKey('UserModel', on_delete=models.CASCADE,)
