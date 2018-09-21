@@ -13,11 +13,7 @@ class ActivityView(viewsets.ViewSet):
             return Response(activity_serializer.data, status=status.HTTP_201_CREATED)
         return Response(activity_serializer.errors, status=status.HTTP_200_OK)
 
-<<<<<<< HEAD
 
-=======
-    ##  @api_view(['GET', 'POST'])
->>>>>>> parent of 39a71ad... Activity v1.0
     def Activity_list(self, request):
         if request.method == 'GET':
             activities = Activity.objects.all()
