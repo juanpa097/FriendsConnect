@@ -4,14 +4,13 @@ from App.activity.model import Activity
 
 
 class ActivitySerializer(serializers.ModelSerializer):
-    location = serializers.ReadOnlyField()
+    ###location = serializers.ReadOnlyField()
 
     class Meta:
         model = Activity
-        fields = '__all__'
-        # fields = ('name', 'description')
+        fields = ('name', 'description', 'location', 'due_date', 'max_participants', 'visibility')
+        ###fields = ('name', 'description', 'location', 'due_date', 'max_participants', 'visibility', 'User_Activity_id')
 
-    ##def create(self, validate_data):
-      ##  return Activity.objects.create(**validate_data)
+
 
 

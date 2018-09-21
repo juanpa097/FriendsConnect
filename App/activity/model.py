@@ -10,20 +10,4 @@ class Activity(models.Model):
     due_date = models.DateTimeField()
     max_participants = models.IntegerField()
     visibility = models.BooleanField()
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    # User_Activity_id = models.IntegerField()
-=======
-    #User_Activity_id = models.IntegerField()
->>>>>>> parent of 83bee6f... Activity v3.0 cascade
-=======
-    #User_Activity_id = models.IntegerField()
->>>>>>> parent of 83bee6f... Activity v3.0 cascade
-=======
-    #User_Activity_id = models.IntegerField()
->>>>>>> parent of 83bee6f... Activity v3.0 cascade
-=======
-    #User_Activity_id = models.IntegerField()
->>>>>>> parent of 83bee6f... Activity v3.0 cascade
+    ###User_Activity_id = models.ForeignKey('UserModel', on_delete=models.CASCADE)
