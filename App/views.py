@@ -9,11 +9,15 @@ auth = ObtainExpiringAuthToken.as_view()
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 activity_exact = ActivityView.as_view(dict(get='activity_exact', put='activity_exact', delete='activity_exact'))
 activity = ActivityView.as_view(dict(post='create', get='activity_list'))
 =======
 =======
 =======
+=======
+
+>>>>>>> parent of 83bee6f... Activity v3.0 cascade
 
 >>>>>>> parent of 83bee6f... Activity v3.0 cascade
 
