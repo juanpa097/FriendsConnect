@@ -14,7 +14,6 @@ class ActivityView(viewsets.ViewSet):
             return Response(activity_serializer.data, status=status.HTTP_201_CREATED)
         return Response(activity_serializer.errors, status=status.HTTP_200_OK)
 
-
     @staticmethod
     def activity_list(request):
         if request.method == 'GET':
