@@ -11,15 +11,18 @@ class ActivityView(viewsets.ViewSet):
         activity_serializer = ActivitySerializer(data=request.data)
         if activity_serializer.is_valid():
             activity_serializer.create(request.data)
-            return Response(activity_serializer.data, status=status.HTTP_201_CREATED)
-        return Response(activity_serializer.errors, status=status.HTTP_200_OK)
+            return Response(activity_serializer.data,
+                            status=status.HTTP_201_CREATED)
+        return Response(activity_serializer.errors,
+                        status=status.HTTP_200_OK)
 
     @staticmethod
     def activity_list(request):
         if request.method == 'GET':
             activities = Activity.objects.all()
             activity_serializer = ActivitySerializer(activities, many=True)
-            return Response(activity_serializer.data, status=status.HTTP_202_ACCEPTED)
+            return Response(activity_serializer.data,
+                            status=status.HTTP_202_ACCEPTED)
 
     @staticmethod
     def activity_exact(request, pk):
@@ -30,14 +33,18 @@ class ActivityView(viewsets.ViewSet):
 
         if request.method == 'GET':
             activity_serializer = ActivitySerializer(activity)
-            return Response(activity_serializer.data, status=status.HTTP_202_ACCEPTED)
+            return Response(activity_serializer.data,
+                            status=status.HTTP_202_ACCEPTED)
 
         elif request.method == 'PUT':
-            activity_serializer = ActivitySerializer(activity, data=request.data)
+            activity_serializer = ActivitySerializer(activity,
+                                                     data=request.data)
             if activity_serializer.is_valid():
                 activity_serializer.save()
-                return Response(activity_serializer.data, status=status.HTTP_202_ACCEPTED)
-            return Response(activity_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(activity_serializer.data,
+                                status=status.HTTP_202_ACCEPTED)
+            return Response(activity_serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
 
         elif request.method == 'DELETE':
             activity.delete()
