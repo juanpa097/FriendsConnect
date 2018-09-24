@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from App.user.model import UserModel
+from App.user.model import Profile
 from django.contrib.auth.models import User
 
 
@@ -7,11 +7,11 @@ class UserModelSerializer(serializers.ModelSerializer):
     user = serializers.Field(write_only=True, required=False)
 
     class Meta:
-        model = UserModel
+        model = Profile
         fields = '__all__'
 
     def create(self, validated_data, user):
-        return UserModel.objects.create(user=user, **validated_data)
+        return Profile.objects.create(user=user, **validated_data)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -20,7 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'usermodel')
+        fields = ('username', 'password', 'profile')
 
     def create(self, validated_data):
         profile_data = validated_data.pop('usermodel')

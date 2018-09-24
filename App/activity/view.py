@@ -49,3 +49,9 @@ class ActivityView(viewsets.ViewSet):
         elif request.method == 'DELETE':
             activity.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+activity_exact = ActivityView.as_view(dict(get='activity_exact',
+                                           put='activity_exact',
+                                           delete='activity_exact'))
+activity = ActivityView.as_view(dict(post='create', get='activity_list'))
