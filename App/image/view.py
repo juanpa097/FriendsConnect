@@ -11,15 +11,11 @@ class ImageViewSet(viewsets.ViewSet):
 
     def create(self, request):
         image_serializer = ImageSerializer(data=request.data)
-        if image_serializer.is_valid():
-            image_serializer.create(request.data)
-            return Response(
-                'ok',
-                status=status.HTTP_201_CREATED
-            )
+        image_serializer.is_valid(raise_exception=True)
+        image_serializer.save()
         return Response(
-            image_serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
+            'ok',
+            status=status.HTTP_201_CREATED
         )
 
     def delete(self, request):
@@ -60,3 +56,8 @@ class ImageViewSet(viewsets.ViewSet):
             image_serializer.data,
             status=status.HTTP_200_OK
         )
+
+
+image = ImageViewSet.as_view(dict(
+    post='create'
+))
