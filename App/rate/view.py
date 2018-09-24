@@ -55,12 +55,13 @@ class RateViewSet(viewsets.ViewSet):
         average_rate = Rate.objects.filter(user_id=user_id).aggregate(Avg(
             "points"))
         response = {
-            'average_rate' : average_rate
+            'average_rate': average_rate
         }
         return Response(
             response,
             status.HTTP_200_OK
         )
+
 
 rate = RateViewSet.as_view(dict(
     post='create',
