@@ -20,7 +20,7 @@ class UserViewSet(viewsets.ViewSet):
             )
         return Response(
             user_serializer.errors,
-            status=status.HTTP_200_OK
+            status=status.HTTP_400_BAD_REQUEST
         )
 
     # Retrives all user from de db
