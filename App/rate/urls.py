@@ -6,5 +6,5 @@ handler404 = 'views.page_not_found'
 
 urlpatterns = [
     path('rate/', view.rate),
-    path('image/<int:id>/', view.rate_single),
+    path('rate/<int:user_id>/', view.rate_single),
 ]
