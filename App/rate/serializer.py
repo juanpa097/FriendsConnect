@@ -13,9 +13,9 @@ class RateSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Rate
-        fields = ('points', 'user')
+        fields = ('points', 'user_id')
 
     def create(self, validated_data):
-        user_id = validated_data['user']
-        validated_data['user'] = get_object_or_404(User, user_id=user_id)
+        user_id = validated_data['user_id']
+        validated_data['user_id'] = get_object_or_404(User, id=user_id)
         return Rate.objects.create(**validated_data)

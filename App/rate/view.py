@@ -31,7 +31,7 @@ class RateViewSet(viewsets.ViewSet):
             status.HTTP_400_BAD_REQUEST
         )
 
-    def get_all_rates(self):
+    def get_all_rates(self, request):
         """
             Gets all rates
             :rtype: Response
@@ -46,7 +46,7 @@ class RateViewSet(viewsets.ViewSet):
             status=status.HTTP_200_OK
         )
 
-    def get_average_rate(self, user_id):
+    def get_average_rate(self, request, user_id):
         """
             Gets the average user's rate
             :param user_id: Int
@@ -54,11 +54,8 @@ class RateViewSet(viewsets.ViewSet):
         """
         average_rate = Rate.objects.filter(user_id=user_id).aggregate(Avg(
             "points"))
-        response = {
-            'average_rate': average_rate
-        }
         return Response(
-            response,
+            average_rate,
             status.HTTP_200_OK
         )
 
