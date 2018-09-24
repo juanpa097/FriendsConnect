@@ -16,14 +16,14 @@ class UserModelSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
-    usermodel = UserModelSerializer(required=False)
+    profile = UserModelSerializer(required=False)
 
     class Meta:
         model = User
         fields = ('username', 'password', 'profile')
 
     def create(self, validated_data):
-        profile_data = validated_data.pop('usermodel')
+        profile_data = validated_data.pop('profile')
         user = User.objects.create(**validated_data)
         user.set_password(validated_data['password'])
         user.save()
