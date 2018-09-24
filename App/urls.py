@@ -8,4 +8,3 @@ urlpatterns = [
     path('', include('App.image.urls')),
     path('', include('App.activity.urls')),
 ]
-
