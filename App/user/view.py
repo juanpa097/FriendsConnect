@@ -5,9 +5,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
-from App.user.model import UserModel
-
-
 class UserViewSet(viewsets.ViewSet):
 
     def create(self, request, *args, **kwargs):
@@ -20,7 +17,7 @@ class UserViewSet(viewsets.ViewSet):
             )
         return Response(
             user_serializer.errors,
-            status=status.HTTP_200_OK
+            status=status.HTTP_400_BAD_REQUEST
         )
 
     # Retrives all user from de db
@@ -42,3 +39,9 @@ class UserViewSet(viewsets.ViewSet):
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+
+user = UserViewSet.as_view(dict(
+    post='create',
+    get='get_all_user'
+))
