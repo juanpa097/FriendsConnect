@@ -47,7 +47,7 @@ class ActivityTests(APITestCase):
             "max_participants": 3,
             "visibility": "True"
         }
-        self.client.post(url, data, format='json')
+        Activity.objects.create(**data)
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual(len(response.data), 1)
@@ -87,7 +87,6 @@ class ActivityTests(APITestCase):
         self.assertEqual(Activity.objects.count(), 0)
 
     def test_get_activity(self):
-        url = reverse('activity')
         data = {
             "name": "testAc",
             "description": "Des...",
@@ -96,14 +95,13 @@ class ActivityTests(APITestCase):
             "max_participants": 5,
             "visibility": "True"
         }
-        self.client.post(url, data, format='json')
+        Activity.objects.create(**data)
         url = reverse('activity_pk', args=(1,))
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual(response.data['name'], "testAc")
 
     def test_put_activity(self):
-        url = reverse('activity')
         data = {
             "name": "testAc",
             "description": "Des...",
@@ -112,7 +110,7 @@ class ActivityTests(APITestCase):
             "max_participants": 5,
             "visibility": "True"
         }
-        self.client.post(url, data, format='json')
+        Activity.objects.create(**data)
         url = reverse('activity_pk', args=(1,))
         data['name'] = "test2"
         response = self.client.put(url, data, format='json')
@@ -120,7 +118,6 @@ class ActivityTests(APITestCase):
         self.assertEqual(response.data['name'], "test2")
 
     def test_delete_activity(self):
-        url = reverse('activity')
         data = {
             "name": "testAc",
             "description": "Des...",
@@ -129,7 +126,7 @@ class ActivityTests(APITestCase):
             "max_participants": 5,
             "visibility": "True"
         }
-        self.client.post(url, data, format='json')
+        Activity.objects.create(**data)
         url = reverse('activity_pk', args=(1,))
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
