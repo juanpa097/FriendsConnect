@@ -3,7 +3,7 @@ from App.user.model import Profile
 from django.contrib.auth.models import User
 
 
-class UserModelSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     user = serializers.Field(write_only=True, required=False)
 
     class Meta:
@@ -16,7 +16,7 @@ class UserModelSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
-    profile = UserModelSerializer(required=False)
+    profile = ProfileSerializer(required=False)
 
     class Meta:
         model = User
@@ -27,7 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create(**validated_data)
         user.set_password(validated_data['password'])
         user.save()
-        user_model = UserModelSerializer(data=profile_data)
+        user_model = ProfileSerializer(data=profile_data)
         if user_model.is_valid():
             user_model.create(profile_data, user)
         return user
