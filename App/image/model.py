@@ -1,5 +1,6 @@
 from django.db import models
 from FriendsConnect.settings import MEDIA_ROOT
+from django.contrib.auth.models import User
 import os
 
 
@@ -13,6 +14,11 @@ def directory_path(instance, filename):
 class Image(models.Model):
     file = models.FileField(blank=False, null=False,
                             upload_to=directory_path)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        null=True
+    )
 
     def delete(self, *args, **kwargs):
         os.remove(self.file.path)
