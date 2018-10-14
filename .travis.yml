@@ -11,4 +11,6 @@ install:
 
 script:
   - flake8
+  - ./manage.py makemigrations
+  - ./manage.py migrate
   - ./manage.py test
