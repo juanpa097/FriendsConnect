@@ -52,7 +52,7 @@ class ActivityView(viewsets.ViewSet):
             ActivityUser.objects.create(
                 user=request.user.id,
                 activity=activity.id,
-                rol = 1
+                rol=1
             )
             return Response("Register in the activity",
                             status=status.HTTP_202_ACCEPTED)

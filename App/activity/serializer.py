@@ -39,6 +39,7 @@ class ActivitySerializer(serializers.ModelSerializer):
                 serializers.ValidationError("Date invalid it must be > to now")
         return data
 
+
 class ActivityListSerializer(serializers.ModelSerializer):
 
     class Meta:
