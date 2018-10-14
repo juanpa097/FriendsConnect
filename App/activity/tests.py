@@ -5,6 +5,7 @@ from .model import Activity
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from datetime import datetime
+import  datetime as date
 
 
 class ActivityTests(APITestCase):
@@ -21,14 +22,17 @@ class ActivityTests(APITestCase):
         """
         Ensure we can create a new account object.
         """
+        time = datetime.now()
+        time += date.timedelta(days=10)
         url = reverse('activity')
         data = {
             "name": "testAc",
             "description": "Des...",
             "location": "111",
-            "due_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
             "max_participants": 3,
-            "visibility": "True"
+            "visibility": "True",
+            "user_activity_id": self.user.id
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -38,14 +42,17 @@ class ActivityTests(APITestCase):
         """
         Get more than one item if get all activities
         """
+        time = datetime.now()
+        time += date.timedelta(days=10)
         url = reverse('activity')
         data = {
             "name": "testAc",
             "description": "Des...",
             "location": "111",
-            "due_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
             "max_participants": 3,
-            "visibility": "True"
+            "visibility": "True",
+            "user_activity_id": self.user
         }
         Activity.objects.create(**data)
         response = self.client.get(url, format='json')
@@ -63,7 +70,8 @@ class ActivityTests(APITestCase):
             "location": "111",
             "due_date": "2010-10-12 23:06:42",
             "max_participants": 3,
-            "visibility": "True"
+            "visibility": "True",
+            "user_activity_id": self.user.id
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -73,27 +81,34 @@ class ActivityTests(APITestCase):
         """
         Ensure we can create a new account object.
         """
+        time = datetime.now()
+        time += date.timedelta(days=10)
         url = reverse('activity')
         data = {
             "name": "testAc",
             "description": "Des...",
             "location": "111",
-            "due_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
             "max_participants": -1,
-            "visibility": "True"
+            "visibility": "True",
+            "user_activity_id": self.user.id
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Activity.objects.count(), 0)
 
     def test_get_activity(self):
+
+        time = datetime.now()
+        time += date.timedelta(days=10)
         data = {
             "name": "testAc",
             "description": "Des...",
             "location": "111",
-            "due_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
             "max_participants": 5,
-            "visibility": "True"
+            "visibility": "True",
+            "user_activity_id": self.user
         }
         Activity.objects.create(**data)
         url = reverse('activity_pk', args=(1,))
@@ -102,29 +117,38 @@ class ActivityTests(APITestCase):
         self.assertEqual(response.data['name'], "testAc")
 
     def test_put_activity(self):
+
+        time = datetime.now()
+        time += date.timedelta(days=10)
         data = {
             "name": "testAc",
             "description": "Des...",
             "location": "111",
-            "due_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
             "max_participants": 5,
-            "visibility": "True"
+            "visibility": "True",
+            "user_activity_id": self.user
         }
         Activity.objects.create(**data)
         url = reverse('activity_pk', args=(1,))
         data['name'] = "test2"
+        data['user_activity_id']= self.user.id
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual(response.data['name'], "test2")
 
     def test_delete_activity(self):
+
+        time = datetime.now()
+        time += date.timedelta(days=10)
         data = {
             "name": "testAc",
             "description": "Des...",
             "location": "111",
-            "due_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
             "max_participants": 5,
-            "visibility": "True"
+            "visibility": "True",
+            "user_activity_id": self.user
         }
         Activity.objects.create(**data)
         url = reverse('activity_pk', args=(1,))
