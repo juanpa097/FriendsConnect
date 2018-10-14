@@ -3,13 +3,14 @@ import datetime
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
-from App.activity.model import Activity
-from App.activity.serializer import ActivitySerializer
+from App.activity.model import Activity, ActivityUser
+from App.activity.serializer import ActivitySerializer, ActivityListSerializer
 
 
 class ActivityView(viewsets.ViewSet):
     @staticmethod
     def create(request):
+        request.data['user'] = request.user.id
         activity_serializer = ActivitySerializer(data=request.data)
         if activity_serializer.is_valid():
             activity_serializer.create(request.data)
@@ -21,8 +22,17 @@ class ActivityView(viewsets.ViewSet):
     @staticmethod
     def activity_list(request):
         if request.method == 'GET':
-            activities = Activity.objects.all()
-            activity_serializer = ActivitySerializer(activities, many=True)
+            activities = Activity.objects.all().values(
+                'id',
+                'name',
+                'max_participants',
+                'due_date',
+            )
+            # TODO - capacity of activity, create query
+            activity_serializer = ActivityListSerializer(
+                activities,
+                many=True,
+            )
             return Response(activity_serializer.data,
                             status=status.HTTP_202_ACCEPTED)
 
@@ -36,6 +46,15 @@ class ActivityView(viewsets.ViewSet):
         if request.method == 'GET':
             activity_serializer = ActivitySerializer(activity)
             return Response(activity_serializer.data,
+                            status=status.HTTP_202_ACCEPTED)
+
+        elif request.method == 'POST':
+            ActivityUser.objects.create(
+                user=request.user.id,
+                activity=activity.id,
+                rol = 1
+            )
+            return Response("Register in the activity",
                             status=status.HTTP_202_ACCEPTED)
 
         elif request.method == 'PUT':
