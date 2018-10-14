@@ -5,7 +5,7 @@ from .model import Activity
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from datetime import datetime
-import  datetime as date
+import datetime as date
 
 
 class ActivityTests(APITestCase):
@@ -98,7 +98,6 @@ class ActivityTests(APITestCase):
         self.assertEqual(Activity.objects.count(), 0)
 
     def test_get_activity(self):
-
         time = datetime.now()
         time += date.timedelta(days=10)
         data = {
@@ -117,7 +116,6 @@ class ActivityTests(APITestCase):
         self.assertEqual(response.data['name'], "testAc")
 
     def test_put_activity(self):
-
         time = datetime.now()
         time += date.timedelta(days=10)
         data = {
@@ -132,13 +130,12 @@ class ActivityTests(APITestCase):
         Activity.objects.create(**data)
         url = reverse('activity_pk', args=(1,))
         data['name'] = "test2"
-        data['user_activity_id']= self.user.id
+        data['user_activity_id'] = self.user.id
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual(response.data['name'], "test2")
 
     def test_delete_activity(self):
-
         time = datetime.now()
         time += date.timedelta(days=10)
         data = {
