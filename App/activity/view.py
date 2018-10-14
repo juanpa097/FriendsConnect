@@ -12,18 +12,9 @@ class ActivityView(viewsets.ViewSet):
     def create(request):
         activity_serializer = ActivitySerializer(data=request.data)
         if activity_serializer.is_valid():
-            #print(activity_serializer.get_attribute('due_date'))
-            print(datetime.datetime.now())
-            print(activity_serializer.data['due_date'])
-            print()
-            """if datetime.datetime.now() > activity_serializer.data['due_date']:
-                print("1")
-            else:
-                print("2")"""
-            if activity_serializer.data['max_participants'] > 0:
-                activity_serializer.create(request.data)
-                return Response(activity_serializer.data,
-                                status=status.HTTP_201_CREATED)
+            activity_serializer.create(request.data)
+            return Response(activity_serializer.data,
+                            status=status.HTTP_201_CREATED)
         return Response(activity_serializer.errors,
                         status=status.HTTP_200_OK)
 
