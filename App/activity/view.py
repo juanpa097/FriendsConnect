@@ -1,3 +1,5 @@
+import datetime
+
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
@@ -14,7 +16,7 @@ class ActivityView(viewsets.ViewSet):
             return Response(activity_serializer.data,
                             status=status.HTTP_201_CREATED)
         return Response(activity_serializer.errors,
-                        status=status.HTTP_200_OK)
+                        status=status.HTTP_400_BAD_REQUEST)
 
     @staticmethod
     def activity_list(request):

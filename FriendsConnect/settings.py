@@ -24,7 +24,9 @@ SECRET_KEY = 'j0)zumoxob%%*dqxzcdx-idi0z#d!r$ig5f0^h#vlks$6h7%*j'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 
@@ -37,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'App.apps.AppConfig',
     'rest_framework.authtoken',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -47,6 +50,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'FriendsConnect.urls'
