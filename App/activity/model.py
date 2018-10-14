@@ -9,4 +9,14 @@ class Activity(models.Model):
     due_date = models.DateTimeField()
     max_participants = models.IntegerField()
     visibility = models.BooleanField()
-    user_activity_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    users = models.ManyToManyField(
+        User,
+        related_name='activities',
+        through='ActivityUser',
+    )
+
+
+class ActivityUser(models.Model):
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rol = models.IntegerField()

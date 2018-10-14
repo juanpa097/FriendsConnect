@@ -32,7 +32,6 @@ class ActivityTests(APITestCase):
             "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
             "max_participants": 3,
             "visibility": "True",
-            "user_activity_id": self.user.id
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -52,7 +51,6 @@ class ActivityTests(APITestCase):
             "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
             "max_participants": 3,
             "visibility": "True",
-            "user_activity_id": self.user
         }
         Activity.objects.create(**data)
         response = self.client.get(url, format='json')
@@ -71,7 +69,6 @@ class ActivityTests(APITestCase):
             "due_date": "2010-10-12 23:06:42",
             "max_participants": 3,
             "visibility": "True",
-            "user_activity_id": self.user.id
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -91,7 +88,6 @@ class ActivityTests(APITestCase):
             "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
             "max_participants": -1,
             "visibility": "True",
-            "user_activity_id": self.user.id
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -107,7 +103,6 @@ class ActivityTests(APITestCase):
             "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
             "max_participants": 5,
             "visibility": "True",
-            "user_activity_id": self.user
         }
         Activity.objects.create(**data)
         url = reverse('activity_pk', args=(1,))
@@ -125,7 +120,6 @@ class ActivityTests(APITestCase):
             "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
             "max_participants": 5,
             "visibility": "True",
-            "user_activity_id": self.user
         }
         Activity.objects.create(**data)
         url = reverse('activity_pk', args=(1,))
@@ -145,7 +139,6 @@ class ActivityTests(APITestCase):
             "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
             "max_participants": 5,
             "visibility": "True",
-            "user_activity_id": self.user
         }
         Activity.objects.create(**data)
         url = reverse('activity_pk', args=(1,))
