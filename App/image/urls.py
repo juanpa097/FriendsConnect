@@ -5,6 +5,6 @@ from . import view
 handler404 = 'views.page_not_found'
 
 urlpatterns = [
-    path('image/', view.image, name='image'),
-    path('image/<int:id>/', view.image),
+    path('images/', view.image, name='image'),
+    path('images/<int:id>/', view.image),
 ]
