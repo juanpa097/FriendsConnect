@@ -19,14 +19,20 @@ class ForgotPasswordSerializer(serializers.ModelSerializer):
         user = get_object_or_404(User, email=email)
         user.set_password(validated_data['password'])
         user.save()
+        code = validated_data['code']
+        code = get_object_or_404(CodeValidate, code=code, user=user)
+        return {
+            'code': code.code,
+            'username': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name
+        }
 
     def validate(self, attrs):
         email = attrs.get('email')
         user = get_object_or_404(User, email=email)
         code = attrs.get('code')
-        code = get_object_or_404(CodeValidate, code=code)
-        if code.user.id != user.id :
-            raise ValidationError({
-                'ErrorCode': 'The code not correspond with this user.'
-            })
+        code = get_object_or_404(CodeValidate, code=code, user=user)
         return attrs
+
+

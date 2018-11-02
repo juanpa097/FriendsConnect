@@ -4,7 +4,7 @@ from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from datetime import datetime
-
+from django.core import mail
 from App.rate.model import Rate
 from App.code.model import CodeValidate
 
@@ -14,6 +14,8 @@ class ForgotPasswordTests(APITestCase):
         self.data = {
             "username": "testsUser",
             "password": "you_know:v",
+            "first_name": "test",
+            "last_name": "user",
             "email": "test@test.com"
         }
         self.user = User.objects.create(**self.data)
@@ -24,6 +26,9 @@ class ForgotPasswordTests(APITestCase):
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(CodeValidate.objects.all()), 1)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, 'Reset Password')
+
 
     def test_wrong_email_forgot_password(self):
         data = self.data
@@ -39,8 +44,8 @@ class ForgotPasswordTests(APITestCase):
         }
         url = reverse('reset_password_user', args=(email,))
         response = self.client.post(url,json, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(set(response.data), {'ErrorCode'})
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
 
     def test_post_forgot_password(self):
         code = "000000"
@@ -55,6 +60,7 @@ class ForgotPasswordTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         user = User.objects.get(username=self.user.username)
         self.assertNotEqual(self.user.password, user.password)
+
 
 class ValidateCodeUserTest(APITestCase):
     def setUp(self):

@@ -5,8 +5,10 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from pytz import utc
 from random import randint
-from .model import CodeValidate
 
+from App.email.constants import EmailTemplates
+from .model import CodeValidate
+from App.email.mixins import EmailThread
 
 class IsExpiredMixin:
     DURATION = 0
@@ -51,10 +53,31 @@ class CodeGenMixin:
         return code
 
     def generate_password_reset_code(self, user):
-        return self._generate_code(user)
+        code = self._generate_code(user)
+        template = EmailTemplates.get_reset_password()
+        data = {
+            'code': code,
+            'username': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name
+        }
+        EmailThread(
+            template=template,
+            data=data,
+            receivers=(user.email,)
+        ).run()
 
     def generate_user_validate_code(self, user):
-        return self._generate_code(user)
+        code = self._generate_code(user)
+        template = EmailTemplates.get_create_user()
+        data = {
+            'code': code,
+        }
+        EmailThread(
+            template=template,
+            data=data,
+            receivers=(user.email,)
+        ).run()
 
 
 class ValidationCode:

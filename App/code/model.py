@@ -13,7 +13,7 @@ class CodeValidate(models.Model):
     )
 
     def __str__(self):
-        return "Code: {}, user {}".format(
+        return "Code: {}, with user: {}".format(
             self.code,
             self.user.username
         )

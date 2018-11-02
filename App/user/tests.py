@@ -1,3 +1,4 @@
+from django.core import mail
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -5,6 +6,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from datetime import datetime
 
+from App.code.model import CodeValidate
 from App.rate.model import Rate
 
 
@@ -113,6 +115,7 @@ class UserTestsNoCredentials(APITestCase):
         data = {
             "username": "testsUser",
             "password": "you_know:v",
+            "email": "test@test.com",
             "profile": {
                 "rol": 0,
                 "about_me": "--"
@@ -121,3 +124,6 @@ class UserTestsNoCredentials(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), 1)
+        self.assertEqual(CodeValidate.objects.count(),1)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, 'You are welcome')
