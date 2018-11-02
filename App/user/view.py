@@ -109,7 +109,7 @@ class UserViewSet(viewsets.ViewSet):
             "OK",
             status=status.HTTP_200_OK
         )
-    
+
     def unsuscribe_to_activity(self,request, username, activity_id):
         user, activity = self._get_user_and_activity(username, activity_id)
         relation = ActivityUser.objects.get(
@@ -121,7 +121,6 @@ class UserViewSet(viewsets.ViewSet):
             "OK",
             status=status.HTTP_200_OK
         )
-
 
     def get_permissions(self):
         if self.action == 'create':
