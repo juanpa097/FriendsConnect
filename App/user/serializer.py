@@ -3,6 +3,7 @@ from App.user.model import Profile
 from django.contrib.auth.models import User
 from App.code.mixins import CodeGenMixin
 
+
 class ProfileSerializer(serializers.ModelSerializer):
     user = serializers.Field(write_only=True, required=False)
 
@@ -11,14 +12,13 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data, user):
-
         return Profile.objects.create(user=user, **validated_data)
 
 
 class UserSerializer(
     serializers.ModelSerializer,
     CodeGenMixin
-    ):
+):
     password = serializers.CharField(write_only=True)
     profile = ProfileSerializer(required=False)
 

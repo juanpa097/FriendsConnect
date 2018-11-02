@@ -82,6 +82,7 @@ class ImageViewSet(viewsets.ViewSet):
             'ok',
             status=status.HTTP_200_OK
         )
+
     def get_image_by_username(self, request, username):
         image = Image.objects.get(user=username)
         image_serializer = ImageSerializer(image)
@@ -89,6 +90,7 @@ class ImageViewSet(viewsets.ViewSet):
             image_serializer.data,
             status=status.HTTP_200_OK
         )
+
 
 image = ImageViewSet.as_view(dict(
     post='create'

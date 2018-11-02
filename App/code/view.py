@@ -4,7 +4,7 @@ from rest_framework import status, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from App.email.constants import EmailTemplates
+
 from .serializer import ForgotPasswordSerializer
 from .mixins import (
     CodeGenMixin,
@@ -18,7 +18,6 @@ class ForgotPasswordView(
 ):
     permission_classes = (AllowAny,)
 
-
     def post(self, request, email):
         request.data['email'] = email
         serializer = ForgotPasswordSerializer(data=request.data)
@@ -30,6 +29,7 @@ class ForgotPasswordView(
         user = get_object_or_404(User, email=email)
         self.generate_password_reset_code(user)
         return Response('OK')
+
 
 class ValidateUserView(
     viewsets.ViewSet,

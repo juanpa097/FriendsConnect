@@ -9,6 +9,7 @@ from datetime import datetime
 import datetime as date
 from App.activity.model import Activity
 
+
 class ImageTests(APITestCase):
     def setUp(self):
         self.username = "john"
@@ -84,7 +85,6 @@ class ImageTests(APITestCase):
             "visibility": "True",
         }
         return Activity.objects.create(**data)
-
 
     def api_authentication(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)

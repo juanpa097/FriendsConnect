@@ -124,6 +124,6 @@ class UserTestsNoCredentials(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), 1)
-        self.assertEqual(CodeValidate.objects.count(),1)
+        self.assertEqual(CodeValidate.objects.count(), 1)
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'You are welcome')

@@ -10,6 +10,7 @@ from App.email.constants import EmailTemplates
 from .model import CodeValidate
 from App.email.mixins import EmailThread
 
+
 class IsExpiredMixin:
     DURATION = 0
 

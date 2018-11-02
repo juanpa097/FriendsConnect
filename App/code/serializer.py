@@ -34,5 +34,3 @@ class ForgotPasswordSerializer(serializers.ModelSerializer):
         code = attrs.get('code')
         code = get_object_or_404(CodeValidate, code=code, user=user)
         return attrs
-
-

@@ -29,7 +29,6 @@ class ForgotPasswordTests(APITestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'Reset Password')
 
-
     def test_wrong_email_forgot_password(self):
         data = self.data
         data['username'] = 'test2'
@@ -43,9 +42,8 @@ class ForgotPasswordTests(APITestCase):
             "password": "test123"
         }
         url = reverse('reset_password_user', args=(email,))
-        response = self.client.post(url,json, format='json')
+        response = self.client.post(url, json, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
 
     def test_post_forgot_password(self):
         code = "000000"
@@ -75,7 +73,7 @@ class ValidateCodeUserTest(APITestCase):
     def test_validate_user_code(self):
         code = "000000"
         code = CodeValidate.objects.create(code=code, user=self.user)
-        url = reverse('validate_user', args=(self.username,code.code))
+        url = reverse('validate_user', args=(self.username, code.code))
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, "OK")

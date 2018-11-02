@@ -4,13 +4,14 @@ from os import environ
 from django.template import loader
 from django.core.mail import EmailMessage
 
+
 class EmailThread(threading.Thread):
     def __init__(self,
                  template,
                  data,
                  receivers=None,
                  sender=None,
-    ):
+                 ):
         self.subject = template.get('subject', 'Error')
         self.receivers = \
             receivers or [environ.get('DEFAULT_RECEIVER_EMAIL', '')]

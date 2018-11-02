@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from App.image.model import Image
 
+
 class Activity(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=500)
