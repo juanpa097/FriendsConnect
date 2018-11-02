@@ -10,6 +10,10 @@ from App.user.serializer import UserSerializer, ProfileSerializer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
+from App.code.view import (
+    ForgotPasswordView,
+    ValidateUserView
+)
 
 
 class UserViewSet(viewsets.ViewSet):
@@ -130,4 +134,13 @@ images_by_username = UserViewSet.as_view(dict(
 rates_by_username = UserViewSet.as_view(dict(
     get='get_rate_by_username',
     post='post_rate_by_username'
+))
+
+forgot_password = ForgotPasswordView.as_view(dict(
+    get='get',
+    post='post'
+))
+
+validate_user = ValidateUserView.as_view(dict(
+    get='get'
 ))
