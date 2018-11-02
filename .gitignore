@@ -278,6 +278,7 @@ $RECYCLE.BIN/
 
 # Env
 .envrc
+*.env
 
 
 # End of https://www.gitignore.io/api/macos,linux,python,django,pycharm
