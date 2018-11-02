@@ -6,7 +6,7 @@ class CodeValidate(models.Model):
     user = models.OneToOneField(
         User,
         related_name='user_code',
-        on_delete=models.PROTECT
+        on_delete=models.CASCADE
     )
     code = models.CharField(
         max_length=6,

@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db.models import Avg
 from rest_framework import status, viewsets
 
+from App.activity.model import Activity, ActivityUser
 from App.image.model import Image
 from App.image.serializer import ImageSerializer
 from App.rate.model import Rate
@@ -98,12 +99,53 @@ class UserViewSet(viewsets.ViewSet):
             status=status.HTTP_201_CREATED
         )
 
+    def suscribe_to_activity(self,request, username, activity_id):
+        user, activity = self._get_user_and_activity(username, activity_id)
+        ActivityUser.objects.create(
+            user=user,
+            activity=activity
+        )
+        return Response(
+            "OK",
+            status=status.HTTP_200_OK
+        )
+    
+    def unsuscribe_to_activity(self,request, username, activity_id):
+        user, activity = self._get_user_and_activity(username, activity_id)
+        relation = ActivityUser.objects.get(
+            user=user,
+            activity=activity
+        )
+        relation.delete()
+        return Response(
+            "OK",
+            status=status.HTTP_200_OK
+        )
+
+
     def get_permissions(self):
         if self.action == 'create':
             permission_classes = [AllowAny]
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+    def _get_user_and_activity(self, username, activity_id):
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response(
+                {'username': "User not found"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            activity = Activity.objects.get(id=activity_id)
+        except Activity.DoesNotExist:
+            return Response(
+                {'activity': "Activity not found"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        return user, activity
 
 
 user = UserViewSet.as_view(dict(
@@ -138,4 +180,9 @@ validate_user = ValidateUserView.as_view(dict(
 image_user = ImageViewSet.as_view(dict(
     put='put_user_image',
     get='get_image_by_username'
+))
+
+user_and_activity_actions = UserViewSet.as_view(dict(
+    post='suscribe_to_activity',
+    delete='unsuscribe_to_activity'
 ))

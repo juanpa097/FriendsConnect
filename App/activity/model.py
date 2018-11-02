@@ -26,4 +26,5 @@ class Activity(models.Model):
 class ActivityUser(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    rol = models.IntegerField()
+    # TODO - missings constants
+    rol = models.IntegerField(default=1)

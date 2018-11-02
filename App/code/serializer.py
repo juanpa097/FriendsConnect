@@ -30,7 +30,19 @@ class ForgotPasswordSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         email = attrs.get('email')
-        user = get_object_or_404(User, email=email)
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            raise ValidationError({
+                'email': 'Email not found.'
+            })
+
         code = attrs.get('code')
-        code = get_object_or_404(CodeValidate, code=code, user=user)
+        try:
+            code = CodeValidate.objects.get(code=code, user=user)
+        except CodeValidate.DoesNotExist:
+            raise ValidationError({
+                'code': 'Code not found.'
+            })
+
         return attrs

@@ -43,7 +43,7 @@ class ForgotPasswordTests(APITestCase):
         }
         url = reverse('reset_password_user', args=(email,))
         response = self.client.post(url, json, format='json')
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_forgot_password(self):
         code = "000000"
