@@ -86,6 +86,6 @@ class ValidationCode:
     def validate_code(self, username, code):
         user = get_object_or_404(User, username=username)
         code = get_object_or_404(CodeValidate, code=code, user=user)
-        user.validate = True
-        user.save()
+        user.profile.validate = True
+        user.profile.save()
         code.delete()

@@ -7,6 +7,7 @@ from datetime import datetime
 from django.core import mail
 from App.rate.model import Rate
 from App.code.model import CodeValidate
+from App.user.model import Profile
 
 
 class ForgotPasswordTests(APITestCase):
@@ -65,10 +66,18 @@ class ValidateCodeUserTest(APITestCase):
         self.username = "john"
         self.email = "john@snow.com"
         self.password = "you_know_nothing"
-        self.user = User.objects.create_user(self.username, self.email,
-                                             self.password)
+        self.user = User.objects.create_user(
+            self.username,
+            self.email,
+            self.password,
+        )
         self.token = Token.objects.create(user=self.user)
         self.api_authentication()
+        profile = {
+            "rol": 1,
+            "user_id":self.user.id
+        }
+        Profile.objects.create(**profile)
 
     def test_validate_user_code(self):
         code = "000000"
@@ -77,6 +86,8 @@ class ValidateCodeUserTest(APITestCase):
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, "OK")
+        user = User.objects.get(id=self.user.id)
+        self.assertEqual(user.profile.validate, True)
 
     def api_authentication(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
