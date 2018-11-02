@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-
+from App.image.model import Image
 
 class Activity(models.Model):
     name = models.CharField(max_length=50)
@@ -13,6 +13,12 @@ class Activity(models.Model):
         User,
         related_name='activities',
         through='ActivityUser',
+    )
+    # TODO Check if changue default, how to make the relation, if defalt photo
+    image = models.OneToOneField(
+        null=True,
+        to=Image,
+        on_delete=models.CASCADE
     )
 
 

@@ -14,6 +14,7 @@ from App.code.view import (
     ForgotPasswordView,
     ValidateUserView
 )
+from App.image.view import ImageViewSet
 
 
 class UserViewSet(viewsets.ViewSet):
@@ -76,13 +77,6 @@ class UserViewSet(viewsets.ViewSet):
         # TODO - not relation activity with user
         pass
 
-    def get_image_by_username(self, request, username):
-        image = Image.objects.get(user=username)
-        image_serializer = ImageSerializer(image)
-        return Response(
-            image_serializer.data,
-            status=status.HTTP_200_OK
-        )
 
     def get_rate_by_username(self, request, username):
         user = get_object_or_404(User, username=username)
@@ -127,9 +121,6 @@ activities_by_username = UserViewSet.as_view(dict(
     get='get_activites_by_username'
 ))
 
-images_by_username = UserViewSet.as_view(dict(
-    get='get_image_by_username'
-))
 
 rates_by_username = UserViewSet.as_view(dict(
     get='get_rate_by_username',
@@ -143,4 +134,9 @@ forgot_password = ForgotPasswordView.as_view(dict(
 
 validate_user = ValidateUserView.as_view(dict(
     get='get'
+))
+
+image_user = ImageViewSet.as_view(dict(
+    put='put_user_image',
+    get='get_image_by_username'
 ))

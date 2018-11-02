@@ -14,11 +14,6 @@ urlpatterns = [
         name='activities_by_username'
     ),
     path(
-        'users/<slug:username>/images',
-        view.images_by_username,
-        name='images_by_username'
-    ),
-    path(
         'users/<slug:username>/rates',
         view.rates_by_username,
         name='rates_by_username'
@@ -27,6 +22,11 @@ urlpatterns = [
         'users/<slug:username>/validate/<slug:code>',
         view.validate_user,
         name='validate_user'
+    ),
+    path(
+        'users/<slug:username>/image',
+        view.image_user,
+        name='image_user'
     ),
     path(
         'users/<str:email>/reset_password',
