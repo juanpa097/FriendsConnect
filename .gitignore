@@ -276,6 +276,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Env
+.envrc
 
 
 # End of https://www.gitignore.io/api/macos,linux,python,django,pycharm
