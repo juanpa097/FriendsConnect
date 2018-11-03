@@ -75,7 +75,7 @@ class ValidateCodeUserTest(APITestCase):
         self.api_authentication()
         profile = {
             "rol": 1,
-            "user_id":self.user.id
+            "user_id": self.user.id
         }
         Profile.objects.create(**profile)
 

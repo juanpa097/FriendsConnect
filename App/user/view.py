@@ -99,7 +99,7 @@ class UserViewSet(viewsets.ViewSet):
             status=status.HTTP_201_CREATED
         )
 
-    def suscribe_to_activity(self,request, username, activity_id):
+    def suscribe_to_activity(self, request, username, activity_id):
         user, activity = self._get_user_and_activity(username, activity_id)
         ActivityUser.objects.create(
             user=user,
@@ -110,7 +110,7 @@ class UserViewSet(viewsets.ViewSet):
             status=status.HTTP_200_OK
         )
 
-    def unsuscribe_to_activity(self,request, username, activity_id):
+    def unsuscribe_to_activity(self, request, username, activity_id):
         user, activity = self._get_user_and_activity(username, activity_id)
         relation = ActivityUser.objects.get(
             user=user,

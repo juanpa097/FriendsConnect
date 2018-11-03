@@ -143,6 +143,7 @@ class UserTests(APITestCase):
         }
         return data
 
+
 class UserTestsNoCredentials(APITestCase):
 
     def test_create(self):
