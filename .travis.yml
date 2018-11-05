@@ -6,7 +6,8 @@ python:
 env:
   - DJANGO=2.1
 
-services: postgresql
+services:
+  - postgresql: "9.6"
 
 
 install:
@@ -17,4 +18,6 @@ before_script:
 
 script:
   - flake8
+  - ./manage.py makemigrations
+  - ./manage.py migrate
   - ./manage.py test

@@ -101,6 +101,12 @@ class UserViewSet(viewsets.ViewSet):
 
     def suscribe_to_activity(self, request, username, activity_id):
         user, activity = self._get_user_and_activity(username, activity_id)
+        if ActivityUser.objests.get(user_id=user.id) > 0:
+            return Response(
+                "Subscription already made",
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         participants = ActivityUser.objects.filter(
             activity_id=activity.id
         ).count()
