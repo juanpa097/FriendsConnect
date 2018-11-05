@@ -52,4 +52,5 @@ class ActivityListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Activity
-        fields = ('id', 'name', 'due_date', 'max_participants')
+        fields = ('id', 'name', 'description', 'location', 'due_date',
+                  'max_participants')
