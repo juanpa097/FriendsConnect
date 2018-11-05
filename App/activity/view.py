@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from App.activity.model import Activity, ActivityUser
 from App.activity.serializer import ActivitySerializer, ActivityListSerializer
 from App.image.view import ImageViewSet
-
+from .constants import ActivityQuerys
 
 class ActivityView(viewsets.ViewSet):
     @staticmethod
@@ -23,8 +23,14 @@ class ActivityView(viewsets.ViewSet):
     @staticmethod
     def activity_list(request):
         if request.method == 'GET':
-            activities = Activity.objects.all()
-
+            activities = Activity.objects.raw(
+                ActivityQuerys.get_query_activity_list()
+            )
+            print('------------------------------------')
+            print(activities[0].__dict__)
+            print('------------------------------------')
+            print(ActivityUser.objects.count())
+            print('------------------------------------')
             # TODO - capacity of activity, create query
             activity_serializer = ActivitySerializer(
                 activities,

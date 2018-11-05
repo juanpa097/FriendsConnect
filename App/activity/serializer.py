@@ -29,10 +29,11 @@ class ActivitySerializer(serializers.ModelSerializer):
         valid_date.pop('user')
         activity = Activity.objects.create(**valid_date)
         user = get_object_or_404(User, id=user_id)
+        # TODO Change rol to constant
         ActivityUser.objects.create(
             user=user,
             activity=activity,
-            rol=1
+            rol=0
         )
         return activity
 

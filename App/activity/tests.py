@@ -2,7 +2,7 @@ from django.urls import reverse
 from django.utils.timezone import make_aware
 from rest_framework import status
 from rest_framework.test import APITestCase
-from .model import Activity
+from .model import Activity, ActivityUser
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from datetime import datetime
@@ -36,11 +36,19 @@ class ActivityTests(APITestCase):
         """
         url = reverse('activity')
         data = self._get_default_activity()
-        Activity.objects.create(**data)
+        activity = Activity.objects.create(**data)
+        ActivityUser.objects.create(
+            user=self.user,
+            activity=activity,
+            rol=0
+        )
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual(len(response.data), 1)
         print(response.data)
+
+    def test_query_activities(self):
+        pass
 
     def test_create_Activity_date_less_now(self):
         """
