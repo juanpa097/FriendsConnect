@@ -23,7 +23,7 @@ class ActivitySerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'description', 'location', 'begin_date',
                   'end_date', 'max_participants', 'visibility', 'image',
                   'date_created', 'author')
-        
+
     def create(self, valid_date):
         user_id = valid_date['user']
         valid_date.pop('user')
