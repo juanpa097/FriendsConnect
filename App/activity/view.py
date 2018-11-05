@@ -25,6 +25,8 @@ class ActivityView(viewsets.ViewSet):
             activities = Activity.objects.all().values(
                 'id',
                 'name',
+                'description',
+                'location',
                 'max_participants',
                 'due_date',
             )

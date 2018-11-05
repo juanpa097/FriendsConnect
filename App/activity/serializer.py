@@ -17,7 +17,7 @@ class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
         fields = ('id', 'name', 'description', 'location', 'due_date',
-                  'max_participants', 'visibility')
+                  'max_participants')
 
     def create(self, valid_date):
         user_id = valid_date['user']
@@ -44,4 +44,5 @@ class ActivityListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Activity
-        fields = ('id', 'name', 'due_date', 'max_participants')
+        fields = ('id', 'name', 'description', 'location', 'due_date',
+                  'max_participants')
