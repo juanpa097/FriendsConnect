@@ -15,14 +15,14 @@ class ActivitySerializer(serializers.ModelSerializer):
     begin_date = serializers.DateTimeField()
     end_date = serializers.DateTimeField()
     image = ImageSerializer(required=False)
-    # author = serializers.CharField(required=False)
     date_created = serializers.DateTimeField(required=False)
+    author = serializers.CharField(required=False)
 
     class Meta:
         model = Activity
         fields = ('id', 'name', 'description', 'location', 'begin_date',
                   'end_date', 'max_participants', 'visibility', 'image',
-                  'date_created')
+                  'date_created', 'author')
 
     def create(self, valid_date):
         user_id = valid_date['user']

@@ -23,14 +23,12 @@ class ActivityView(viewsets.ViewSet):
     @staticmethod
     def activity_list(request):
         if request.method == 'GET':
+            '''
             activities = Activity.objects.raw(
                 ActivityQuerys.get_query_activity_list()
             )
-            print('------------------------------------')
-            print(activities[0].__dict__)
-            print('------------------------------------')
-            print(ActivityUser.objects.count())
-            print('------------------------------------')
+            '''
+            activities = Activity.objects.all()
             # TODO - capacity of activity, create query
             activity_serializer = ActivitySerializer(
                 activities,

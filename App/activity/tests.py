@@ -45,10 +45,33 @@ class ActivityTests(APITestCase):
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual(len(response.data), 1)
-        print(response.data)
 
     def test_query_activities(self):
         pass
+        '''
+        url = reverse('activity')
+        data = self._get_default_activity()
+        activity = Activity.objects.create(**data)
+        ActivityUser.objects.create(
+            user=self.user,
+            activity=activity,
+            rol=0
+        )
+        username = "john2"
+        email = "john@snow2.com"
+        password = "you_know_nothing"
+        user = User.objects.create_user(username, email,
+                                             password)
+        ActivityUser.objects.create(
+            user=user,
+            activity=activity,
+            rol=1
+        )
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+        self.assertEqual(len(response.data), 1)
+        print(response.data)
+        '''
 
     def test_create_Activity_date_less_now(self):
         """
