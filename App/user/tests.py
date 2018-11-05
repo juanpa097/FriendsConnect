@@ -105,7 +105,9 @@ class UserTests(APITestCase):
         self.assertEqual(response.data['points__avg'], 4.0)
 
     def test_suscribe_activity(self):
-        activity = Activity.objects.create(**ActivityTests._get_default_activity())
+        activity = Activity.objects.create(
+            **ActivityTests._get_default_activity()
+        )
         url = reverse(
             'user_and_activity_actions',
             args=(self.username, activity.id)
@@ -115,7 +117,9 @@ class UserTests(APITestCase):
         self.assertEqual(ActivityUser.objects.count(), 1)
 
     def test_unsuscribe_activity(self):
-        activity = Activity.objects.create(**ActivityTests._get_default_activity())
+        activity = Activity.objects.create(
+            **ActivityTests._get_default_activity()
+        )
         ActivityUser.objects.create(
             user=self.user,
             activity=activity
@@ -130,7 +134,6 @@ class UserTests(APITestCase):
 
     def api_authentication(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-
 
 
 class UserTestsNoCredentials(APITestCase):

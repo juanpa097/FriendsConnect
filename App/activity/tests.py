@@ -132,13 +132,12 @@ class ActivityTests(APITestCase):
             end_date=end_date
         )
         url = reverse('activity')
-        response = self.client.post(url, format='json')
+        response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Activity.objects.count(), 0)
 
     def api_authentication(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-
 
     @staticmethod
     def _get_default_activity(
@@ -156,7 +155,8 @@ class ActivityTests(APITestCase):
             begin_date = time.strftime("%Y-%m-%d %H:%M:%S") + 'Z'
         if not end_date:
             end_date = \
-                (time+date.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S") + 'Z'
+                (time + date.timedelta(days=1)).strftime(
+                    "%Y-%m-%d %H:%M:%S") + 'Z'
 
         data = {
             "name": name,

@@ -8,6 +8,7 @@ from App.activity.serializer import ActivitySerializer, ActivityListSerializer
 from App.image.view import ImageViewSet
 from .constants import ActivityQuerys
 
+
 class ActivityView(viewsets.ViewSet):
     @staticmethod
     def create(request):

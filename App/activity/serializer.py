@@ -43,7 +43,7 @@ class ActivitySerializer(serializers.ModelSerializer):
         if data['begin_date'] < now:
             raise \
                 serializers.ValidationError("Date invalid it must be > to now")
-        if data['end_date'] < data['begin_date']:
+        if data['end_date'] <= data['begin_date']:
             raise serializers.ValidationError("Date end is < to begin")
         return data
 
