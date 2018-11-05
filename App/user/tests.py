@@ -10,6 +10,7 @@ import datetime as date
 from App.activity.model import Activity, ActivityUser
 from App.code.model import CodeValidate
 from App.rate.model import Rate
+from App.activity.tests import ActivityTests
 
 
 class UserTests(APITestCase):
@@ -104,7 +105,7 @@ class UserTests(APITestCase):
         self.assertEqual(response.data['points__avg'], 4.0)
 
     def test_suscribe_activity(self):
-        activity = Activity.objects.create(**self._get_activity_data())
+        activity = Activity.objects.create(**ActivityTests._get_default_activity())
         url = reverse(
             'user_and_activity_actions',
             args=(self.username, activity.id)
@@ -114,7 +115,7 @@ class UserTests(APITestCase):
         self.assertEqual(ActivityUser.objects.count(), 1)
 
     def test_unsuscribe_activity(self):
-        activity = Activity.objects.create(**self._get_activity_data())
+        activity = Activity.objects.create(**ActivityTests._get_default_activity())
         ActivityUser.objects.create(
             user=self.user,
             activity=activity
@@ -130,18 +131,6 @@ class UserTests(APITestCase):
     def api_authentication(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
-    def _get_activity_data(self):
-        time = datetime.now()
-        time += date.timedelta(days=10)
-        data = {
-            "name": "testAc",
-            "description": "Des...",
-            "location": "111",
-            "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "max_participants": 3,
-            "visibility": "True",
-        }
-        return data
 
 
 class UserTestsNoCredentials(APITestCase):

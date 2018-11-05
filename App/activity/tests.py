@@ -1,4 +1,5 @@
 from django.urls import reverse
+from django.utils.timezone import make_aware
 from rest_framework import status
 from rest_framework.test import APITestCase
 from .model import Activity
@@ -6,6 +7,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from datetime import datetime
 import datetime as date
+from django.utils import timezone
 
 
 class ActivityTests(APITestCase):
@@ -44,7 +46,10 @@ class ActivityTests(APITestCase):
                 Ensure we can create a new account object.
                 """
         url = reverse('activity')
-        data = self._get_default_activity(due_date="2010-10-12 23:06:42")
+        data = self._get_default_activity(
+            begin_date='2010-09-04 06:00Z',
+            end_date='2010-09-05 06:00Z',
+        )
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Activity.objects.count(), 0)
@@ -88,24 +93,30 @@ class ActivityTests(APITestCase):
     def api_authentication(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
+    @staticmethod
     def _get_default_activity(
-            self,
             name="testAc",
             description="Des...",
             location="111",
-            due_date="",
+            begin_date="",
+            end_date="",
             max_participants=3,
             visibility="True"
     ):
-        time = datetime.now()
+        time = datetime.now(tz=timezone.utc)
         time += date.timedelta(days=10)
-        if not due_date:
-            due_date = time.strftime("%Y-%m-%d %H:%M:%S")
+        if not begin_date:
+            begin_date = time.strftime("%Y-%m-%d %H:%M:%S") + 'Z'
+        if not end_date:
+            end_date = \
+                (time+date.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S") + 'Z'
+
         data = {
             "name": name,
             "description": description,
             "location": location,
-            "due_date": due_date,
+            "begin_date": begin_date,
+            "end_date": end_date,
             "max_participants": max_participants,
             "visibility": visibility,
         }

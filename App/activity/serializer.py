@@ -12,12 +12,13 @@ class ActivitySerializer(serializers.ModelSerializer):
     # location = serializers.ReadOnlyField()
     id = serializers.ReadOnlyField(required=False)
     max_participants = serializers.IntegerField(min_value=0)
-    due_date = serializers.DateTimeField()
+    begin_date = serializers.DateTimeField()
+    end_date = serializers.DateTimeField()
 
     class Meta:
         model = Activity
-        fields = ('id', 'name', 'description', 'location', 'due_date',
-                  'max_participants', 'visibility')
+        fields = ('id', 'name', 'description', 'location', 'begin_date',
+                  'end_date', 'max_participants', 'visibility')
 
     def create(self, valid_date):
         user_id = valid_date['user']
@@ -34,9 +35,11 @@ class ActivitySerializer(serializers.ModelSerializer):
     def validate(self, data):
 
         now = pytz.UTC.localize(datetime.datetime.now())
-        if data['due_date'] < now:
+        if data['begin_date'] < now:
             raise \
                 serializers.ValidationError("Date invalid it must be > to now")
+        if data['end_date'] < data['begin_date']:
+            raise serializers.ValidationError("Date end is < to begin")
         return data
 
 

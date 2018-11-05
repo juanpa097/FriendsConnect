@@ -8,6 +8,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from datetime import datetime
 import datetime as date
 from App.activity.model import Activity
+from App.activity.tests import ActivityTests
 
 
 class ImageTests(APITestCase):
@@ -74,17 +75,7 @@ class ImageTests(APITestCase):
         self.assertEqual(Image.objects.count(), 1)
 
     def _create_activity(self):
-        time = datetime.now()
-        time += date.timedelta(days=10)
-        data = {
-            "name": "testAc",
-            "description": "Des...",
-            "location": "111",
-            "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "max_participants": 3,
-            "visibility": "True",
-        }
-        return Activity.objects.create(**data)
+        return Activity.objects.create(**ActivityTests._get_default_activity())
 
     def api_authentication(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
