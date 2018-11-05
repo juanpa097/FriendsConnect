@@ -17,12 +17,14 @@ class ActivitySerializer(serializers.ModelSerializer):
     image = ImageSerializer(required=False)
     date_created = serializers.DateTimeField(required=False)
     author = serializers.CharField(required=False)
+    participants = serializers.IntegerField(required=False)
+    comments = serializers.IntegerField(required=False)
 
     class Meta:
         model = Activity
         fields = ('id', 'name', 'description', 'location', 'begin_date',
                   'end_date', 'max_participants', 'visibility', 'image',
-                  'date_created', 'author')
+                  'date_created', 'author', 'participants', 'comments')
 
     def create(self, valid_date):
         user_id = valid_date['user']
@@ -48,9 +50,3 @@ class ActivitySerializer(serializers.ModelSerializer):
         return data
 
 
-class ActivityListSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Activity
-        fields = ('id', 'name', 'description', 'location', 'due_date',
-                  'max_participants')

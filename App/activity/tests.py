@@ -47,8 +47,6 @@ class ActivityTests(APITestCase):
         self.assertEqual(len(response.data), 1)
 
     def test_query_activities(self):
-        pass
-        '''
         url = reverse('activity')
         data = self._get_default_activity()
         activity = Activity.objects.create(**data)
@@ -70,8 +68,6 @@ class ActivityTests(APITestCase):
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual(len(response.data), 1)
-        print(response.data)
-        '''
 
     def test_create_Activity_date_less_now(self):
         """

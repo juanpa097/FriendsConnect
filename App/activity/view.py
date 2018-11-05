@@ -4,7 +4,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 
 from App.activity.model import Activity, ActivityUser
-from App.activity.serializer import ActivitySerializer, ActivityListSerializer
+from App.activity.serializer import ActivitySerializer
 from App.image.view import ImageViewSet
 from .constants import ActivityQuerys
 
@@ -24,12 +24,9 @@ class ActivityView(viewsets.ViewSet):
     @staticmethod
     def activity_list(request):
         if request.method == 'GET':
-            '''
             activities = Activity.objects.raw(
                 ActivityQuerys.get_query_activity_list()
             )
-            '''
-            activities = Activity.objects.all()
             # TODO - capacity of activity, create query
             activity_serializer = ActivitySerializer(
                 activities,

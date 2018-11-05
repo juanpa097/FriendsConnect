@@ -116,6 +116,18 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(ActivityUser.objects.count(), 1)
 
+    def test_suscribe_activity_full(self):
+        activity = Activity.objects.create(
+            **ActivityTests._get_default_activity(max_participants=1)
+        )
+        url = reverse(
+            'user_and_activity_actions',
+            args=(self.username, activity.id)
+        )
+        response = self.client.post(url, format='json')
+        response = self.client.post(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_unsuscribe_activity(self):
         activity = Activity.objects.create(
             **ActivityTests._get_default_activity()

@@ -101,6 +101,14 @@ class UserViewSet(viewsets.ViewSet):
 
     def suscribe_to_activity(self, request, username, activity_id):
         user, activity = self._get_user_and_activity(username, activity_id)
+        participants = ActivityUser.objects.filter(
+            activity_id=activity.id
+        ).count()
+        if participants >= activity.max_participants:
+            return Response(
+                "The activity is complete",
+                status=status.HTTP_400_BAD_REQUEST
+            )
         ActivityUser.objects.create(
             user=user,
             activity=activity

@@ -5,6 +5,7 @@ python:
 
 env:
   - DJANGO=2.1
+  - postgres=9.5
 
 install:
   - pip install -r requirements.txt
