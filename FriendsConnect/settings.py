@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from os import environ
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -59,7 +60,9 @@ ROOT_URLCONF = 'FriendsConnect.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, "App/email/templates"),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -137,3 +140,10 @@ STATIC_URL = '/static/'
 # Media files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'App/static/media')
 MEDIA_URL = '/media/'
+
+# Email Credentials
+EMAIL_HOST = environ.get('EMAIL_HOST', 'email_host')
+EMAIL_PORT = environ.get('EMAIL_PORT', 'email_port')
+EMAIL_USE_TLS = environ.get('EMAIL_USE_TLS', 'email_use_tls')
+EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER', 'email')
+EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD', 'password')

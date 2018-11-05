@@ -1,11 +1,13 @@
 from django.urls import reverse
+from django.utils.timezone import make_aware
 from rest_framework import status
 from rest_framework.test import APITestCase
-from .model import Activity
+from .model import Activity, ActivityUser
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from datetime import datetime
 import datetime as date
+from django.utils import timezone
 
 
 class ActivityTests(APITestCase):
@@ -22,17 +24,8 @@ class ActivityTests(APITestCase):
         """
         Ensure we can create a new account object.
         """
-        time = datetime.now()
-        time += date.timedelta(days=10)
         url = reverse('activity')
-        data = {
-            "name": "testAc",
-            "description": "Des...",
-            "location": "111",
-            "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "max_participants": 3,
-            "visibility": "True",
-        }
+        data = self._get_default_activity()
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Activity.objects.count(), 1)
@@ -41,35 +34,54 @@ class ActivityTests(APITestCase):
         """
         Get more than one item if get all activities
         """
-        time = datetime.now()
-        time += date.timedelta(days=10)
         url = reverse('activity')
-        data = {
-            "name": "testAc",
-            "description": "Des...",
-            "location": "111",
-            "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "max_participants": 3,
-            "visibility": "True",
-        }
-        Activity.objects.create(**data)
+        data = self._get_default_activity()
+        activity = Activity.objects.create(**data)
+        ActivityUser.objects.create(
+            user=self.user,
+            activity=activity,
+            rol=0
+        )
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual(len(response.data), 1)
+
+    def test_query_activities(self):
+        pass
+        '''
+        url = reverse('activity')
+        data = self._get_default_activity()
+        activity = Activity.objects.create(**data)
+        ActivityUser.objects.create(
+            user=self.user,
+            activity=activity,
+            rol=0
+        )
+        username = "john2"
+        email = "john@snow2.com"
+        password = "you_know_nothing"
+        user = User.objects.create_user(username, email,
+                                             password)
+        ActivityUser.objects.create(
+            user=user,
+            activity=activity,
+            rol=1
+        )
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+        self.assertEqual(len(response.data), 1)
+        print(response.data)
+        '''
 
     def test_create_Activity_date_less_now(self):
         """
                 Ensure we can create a new account object.
                 """
         url = reverse('activity')
-        data = {
-            "name": "testAc",
-            "description": "Des...",
-            "location": "111",
-            "due_date": "2010-10-12 23:06:42",
-            "max_participants": 3,
-            "visibility": "True",
-        }
+        data = self._get_default_activity(
+            begin_date='2010-09-04 06:00Z',
+            end_date='2010-09-05 06:00Z',
+        )
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Activity.objects.count(), 0)
@@ -78,32 +90,14 @@ class ActivityTests(APITestCase):
         """
         Ensure we can create a new account object.
         """
-        time = datetime.now()
-        time += date.timedelta(days=10)
         url = reverse('activity')
-        data = {
-            "name": "testAc",
-            "description": "Des...",
-            "location": "111",
-            "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "max_participants": -1,
-            "visibility": "True",
-        }
+        data = self._get_default_activity(max_participants=-1)
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Activity.objects.count(), 0)
 
     def test_get_activity(self):
-        time = datetime.now()
-        time += date.timedelta(days=10)
-        data = {
-            "name": "testAc",
-            "description": "Des...",
-            "location": "111",
-            "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "max_participants": 5,
-            "visibility": "True",
-        }
+        data = self._get_default_activity()
         Activity.objects.create(**data)
         url = reverse('activity_pk', args=(1,))
         response = self.client.get(url, format='json')
@@ -111,16 +105,7 @@ class ActivityTests(APITestCase):
         self.assertEqual(response.data['name'], "testAc")
 
     def test_put_activity(self):
-        time = datetime.now()
-        time += date.timedelta(days=10)
-        data = {
-            "name": "testAc",
-            "description": "Des...",
-            "location": "111",
-            "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "max_participants": 5,
-            "visibility": "True",
-        }
+        data = self._get_default_activity()
         Activity.objects.create(**data)
         url = reverse('activity_pk', args=(1,))
         data['name'] = "test2"
@@ -130,21 +115,56 @@ class ActivityTests(APITestCase):
         self.assertEqual(response.data['name'], "test2")
 
     def test_delete_activity(self):
-        time = datetime.now()
-        time += date.timedelta(days=10)
-        data = {
-            "name": "testAc",
-            "description": "Des...",
-            "location": "111",
-            "due_date": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "max_participants": 5,
-            "visibility": "True",
-        }
+        data = self._get_default_activity()
         Activity.objects.create(**data)
         url = reverse('activity_pk', args=(1,))
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Activity.objects.count(), 0)
 
+    def test_begin_after_end_activity(self):
+        time = datetime.now(tz=timezone.utc)
+        time += date.timedelta(days=10)
+        begin_date = time.strftime("%Y-%m-%d %H:%M:%S") + 'Z'
+        end_date = time.strftime("%Y-%m-%d %H:%M:%S") + 'Z'
+        data = self._get_default_activity(
+            begin_date=begin_date,
+            end_date=end_date
+        )
+        url = reverse('activity')
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Activity.objects.count(), 0)
+
     def api_authentication(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+    @staticmethod
+    def _get_default_activity(
+            name="testAc",
+            description="Des...",
+            location="111",
+            begin_date="",
+            end_date="",
+            max_participants=3,
+            visibility="True"
+    ):
+        time = datetime.now(tz=timezone.utc)
+        time += date.timedelta(days=10)
+        if not begin_date:
+            begin_date = time.strftime("%Y-%m-%d %H:%M:%S") + 'Z'
+        if not end_date:
+            end_date = \
+                (time + date.timedelta(days=1)).strftime(
+                    "%Y-%m-%d %H:%M:%S") + 'Z'
+
+        data = {
+            "name": name,
+            "description": description,
+            "location": location,
+            "begin_date": begin_date,
+            "end_date": end_date,
+            "max_participants": max_participants,
+            "visibility": visibility,
+        }
+        return data

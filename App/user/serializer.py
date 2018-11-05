@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from App.user.model import Profile
 from django.contrib.auth.models import User
+from App.code.mixins import CodeGenMixin
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -14,7 +15,10 @@ class ProfileSerializer(serializers.ModelSerializer):
         return Profile.objects.create(user=user, **validated_data)
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(
+    serializers.ModelSerializer,
+    CodeGenMixin
+):
     password = serializers.CharField(write_only=True)
     profile = ProfileSerializer(required=False)
 
@@ -30,4 +34,5 @@ class UserSerializer(serializers.ModelSerializer):
         user_model = ProfileSerializer(data=profile_data)
         if user_model.is_valid():
             user_model.create(profile_data, user)
+        self.generate_user_validate_code(user)
         return user

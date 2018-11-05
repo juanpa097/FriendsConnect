@@ -1,8 +1,9 @@
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 
-
+from App.activity.model import Activity
 from App.image.model import Image
 from App.image.serializer import ImageSerializer
 
@@ -52,6 +53,39 @@ class ImageViewSet(viewsets.ViewSet):
             image
         )
 
+        return Response(
+            image_serializer.data,
+            status=status.HTTP_200_OK
+        )
+
+    def put_user_image(self, request, username):
+        # TODO - Delete before image
+        user = get_object_or_404(User, username=username)
+        image_serializer = ImageSerializer(data=request.data)
+        image_serializer.is_valid(raise_exception=True)
+        user.image = image_serializer.save()
+        user.save()
+        return Response(
+            'ok',
+            status=status.HTTP_200_OK
+        )
+
+    def put_activity_image(self, request, activity_id):
+        # TODO - verify permissions
+        # TODO - Delete before image
+        activity = get_object_or_404(Activity, id=activity_id)
+        image_serializer = ImageSerializer(data=request.data)
+        image_serializer.is_valid(raise_exception=True)
+        activity.image = image_serializer.save()
+        activity.save()
+        return Response(
+            'ok',
+            status=status.HTTP_200_OK
+        )
+
+    def get_image_by_username(self, request, username):
+        image = Image.objects.get(user=username)
+        image_serializer = ImageSerializer(image)
         return Response(
             image_serializer.data,
             status=status.HTTP_200_OK
