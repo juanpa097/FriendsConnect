@@ -20,7 +20,7 @@ class Activity(models.Model):
         related_name='activities',
         through='ActivityUser',
     )
-    # TODO Check if changue default, how to make the relation, if defalt photo
+    # TODO Check if changue default, how to make the relation, if default photo
     image = models.OneToOneField(
         null=True,
         to=Image,

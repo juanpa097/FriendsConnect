@@ -98,16 +98,16 @@ class ActivityTests(APITestCase):
 
     def test_get_activity(self):
         data = self._get_default_activity()
-        Activity.objects.create(**data)
-        url = reverse('activity_pk', args=(1,))
+        activity = Activity.objects.create(**data)
+        url = reverse('activity_pk', args=(activity.id,))
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual(response.data['name'], "testAc")
 
     def test_put_activity(self):
         data = self._get_default_activity()
-        Activity.objects.create(**data)
-        url = reverse('activity_pk', args=(1,))
+        activity = Activity.objects.create(**data)
+        url = reverse('activity_pk', args=(activity.id,))
         data['name'] = "test2"
         data['user_activity_id'] = self.user.id
         response = self.client.put(url, data, format='json')
@@ -116,8 +116,8 @@ class ActivityTests(APITestCase):
 
     def test_delete_activity(self):
         data = self._get_default_activity()
-        Activity.objects.create(**data)
-        url = reverse('activity_pk', args=(1,))
+        activity = Activity.objects.create(**data)
+        url = reverse('activity_pk', args=(activity.id,))
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Activity.objects.count(), 0)
