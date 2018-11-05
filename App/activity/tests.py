@@ -40,6 +40,7 @@ class ActivityTests(APITestCase):
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual(len(response.data), 1)
+        print(response.data)
 
     def test_create_Activity_date_less_now(self):
         """
@@ -90,8 +91,23 @@ class ActivityTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Activity.objects.count(), 0)
 
+    def test_begin_after_end_activity(self):
+        time = datetime.now(tz=timezone.utc)
+        time += date.timedelta(days=10)
+        begin_date = time.strftime("%Y-%m-%d %H:%M:%S") + 'Z'
+        end_date = time.strftime("%Y-%m-%d %H:%M:%S") + 'Z'
+        data = self._get_default_activity(
+            begin_date=begin_date,
+            end_date=end_date
+        )
+        url = reverse('activity')
+        response = self.client.post(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Activity.objects.count(), 0)
+
     def api_authentication(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
 
     @staticmethod
     def _get_default_activity(

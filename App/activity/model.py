@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from App.image.model import Image
+from datetime import datetime
 
 
 class Activity(models.Model):
@@ -9,6 +10,9 @@ class Activity(models.Model):
     location = models.CharField(max_length=500)
     begin_date = models.DateTimeField()
     end_date = models.DateTimeField()
+    date_created = models.DateTimeField(
+        auto_now_add=True, blank=True
+    )
     max_participants = models.IntegerField()
     visibility = models.BooleanField()
     users = models.ManyToManyField(

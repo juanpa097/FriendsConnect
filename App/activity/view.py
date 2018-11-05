@@ -24,6 +24,7 @@ class ActivityView(viewsets.ViewSet):
     def activity_list(request):
         if request.method == 'GET':
             activities = Activity.objects.all()
+
             # TODO - capacity of activity, create query
             activity_serializer = ActivitySerializer(
                 activities,
