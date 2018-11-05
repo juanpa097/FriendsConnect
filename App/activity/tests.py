@@ -59,7 +59,7 @@ class ActivityTests(APITestCase):
         email = "john@snow2.com"
         password = "you_know_nothing"
         user = User.objects.create_user(username, email,
-                                             password)
+                                        password)
         ActivityUser.objects.create(
             user=user,
             activity=activity,

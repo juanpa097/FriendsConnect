@@ -5,10 +5,15 @@ python:
 
 env:
   - DJANGO=2.1
-  - postgres=9.5
+
+services: postgresql
+
 
 install:
   - pip install -r requirements.txt
+
+before_script:
+  - psql -c "CREATE DATABASE mydb;" -U postgres
 
 script:
   - flake8

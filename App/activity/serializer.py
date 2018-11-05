@@ -48,5 +48,3 @@ class ActivitySerializer(serializers.ModelSerializer):
         if data['end_date'] <= data['begin_date']:
             raise serializers.ValidationError("Date end is < to begin")
         return data
-
-
