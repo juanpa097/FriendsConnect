@@ -19,12 +19,14 @@ class ActivitySerializer(serializers.ModelSerializer):
     author = serializers.CharField(required=False)
     participants = serializers.IntegerField(required=False)
     comments = serializers.IntegerField(required=False)
+    is_current_user_subscribed = serializers.BooleanField(required=False)
 
     class Meta:
         model = Activity
         fields = ('id', 'name', 'description', 'location', 'begin_date',
                   'end_date', 'max_participants', 'visibility', 'image',
-                  'date_created', 'author', 'participants', 'comments')
+                  'date_created', 'author', 'participants', 'comments',
+                  'is_current_user_subscribed')
 
     def create(self, valid_date):
         user_id = valid_date['user']

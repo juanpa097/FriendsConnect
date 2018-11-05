@@ -68,6 +68,17 @@ class ActivityTests(APITestCase):
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual(len(response.data), 1)
+        data_response = response.data[0]
+        self.assertEqual(data_response['name'], activity.name)
+        self.assertEqual(data_response['id'], activity.id)
+        self.assertEqual(data_response['location'], activity.location)
+        self.assertEqual(data_response['max_participants'],
+                         activity.max_participants)
+        self.assertEqual(data_response['image'], activity.image)
+        self.assertEqual(data_response['author'], self.username)
+        self.assertEqual(data_response['participants'], 2)
+        self.assertEqual(data_response['comments'], 0)
+        self.assertEqual(data_response['is_current_user_subscribed'], True)
 
     def test_create_Activity_date_less_now(self):
         """
