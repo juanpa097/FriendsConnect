@@ -1,11 +1,16 @@
+from django.core import mail
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from datetime import datetime
+import datetime as date
 
+from App.activity.model import Activity, ActivityUser
+from App.code.model import CodeValidate
 from App.rate.model import Rate
+from App.activity.tests import ActivityTests
 
 
 class UserTests(APITestCase):
@@ -99,6 +104,34 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['points__avg'], 4.0)
 
+    def test_suscribe_activity(self):
+        activity = Activity.objects.create(
+            **ActivityTests._get_default_activity()
+        )
+        url = reverse(
+            'user_and_activity_actions',
+            args=(self.username, activity.id)
+        )
+        response = self.client.post(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(ActivityUser.objects.count(), 1)
+
+    def test_unsuscribe_activity(self):
+        activity = Activity.objects.create(
+            **ActivityTests._get_default_activity()
+        )
+        ActivityUser.objects.create(
+            user=self.user,
+            activity=activity
+        )
+        url = reverse(
+            'user_and_activity_actions',
+            args=(self.username, activity.id)
+        )
+        response = self.client.delete(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(ActivityUser.objects.count(), 0)
+
     def api_authentication(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
@@ -113,6 +146,7 @@ class UserTestsNoCredentials(APITestCase):
         data = {
             "username": "testsUser",
             "password": "you_know:v",
+            "email": "test@test.com",
             "profile": {
                 "rol": 0,
                 "about_me": "--"
@@ -121,3 +155,6 @@ class UserTestsNoCredentials(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), 1)
+        self.assertEqual(CodeValidate.objects.count(), 1)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, 'You are welcome')

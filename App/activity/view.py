@@ -5,6 +5,8 @@ from rest_framework.response import Response
 
 from App.activity.model import Activity, ActivityUser
 from App.activity.serializer import ActivitySerializer, ActivityListSerializer
+from App.image.view import ImageViewSet
+from .constants import ActivityQuerys
 
 
 class ActivityView(viewsets.ViewSet):
@@ -22,14 +24,14 @@ class ActivityView(viewsets.ViewSet):
     @staticmethod
     def activity_list(request):
         if request.method == 'GET':
-            activities = Activity.objects.all().values(
-                'id',
-                'name',
-                'max_participants',
-                'due_date',
+            '''
+            activities = Activity.objects.raw(
+                ActivityQuerys.get_query_activity_list()
             )
+            '''
+            activities = Activity.objects.all()
             # TODO - capacity of activity, create query
-            activity_serializer = ActivityListSerializer(
+            activity_serializer = ActivitySerializer(
                 activities,
                 many=True,
             )
@@ -76,3 +78,6 @@ activity_exact = ActivityView.as_view(dict(get='activity_exact',
                                            put='activity_exact',
                                            delete='activity_exact'))
 activity = ActivityView.as_view(dict(post='create', get='activity_list'))
+image_activity = ImageViewSet.as_view(dict(
+    put='put_activity_image'
+))
