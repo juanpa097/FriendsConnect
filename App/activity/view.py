@@ -7,6 +7,7 @@ from rest_framework.response import Response
 
 from App.activity.model import Activity, ActivityUser
 from App.activity.serializer import ActivitySerializer
+from App.comment.view import CommentViewSet
 from App.image.view import ImageViewSet
 from .constants import ActivityQuerys
 
@@ -116,4 +117,9 @@ activity_exact = ActivityView.as_view(dict(get='activity_exact',
 activity = ActivityView.as_view(dict(post='create', get='activity_list'))
 image_activity = ImageViewSet.as_view(dict(
     put='put_activity_image'
+))
+
+comments_by_activity = CommentViewSet.as_view(dict(
+    post='post_comments_by_activity',
+    get='get_comments_by_activity'
 ))
