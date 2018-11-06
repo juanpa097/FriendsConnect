@@ -75,7 +75,6 @@ class UserViewSet(viewsets.ViewSet):
             status=status.HTTP_200_OK
         )
 
-
     def get_rate_by_username(self, request, username):
         user = get_object_or_404(User, username=username)
         average_rate = Rate.objects.filter(user_id=user.id).aggregate(Avg(

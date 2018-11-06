@@ -60,8 +60,8 @@ class ActivityQuerys(Enum):
     def get_query_activity_list(cls, user_id):
         user_id = int(user_id).__str__()
         return cls.QUERY_ACTIVITY_LIST_FIRST_PART.value + \
-               user_id + \
-               cls.QUERY_ACTIVITY_LIST_SECOND_PART.value
+            user_id + \
+            cls.QUERY_ACTIVITY_LIST_SECOND_PART.value
 
     QUERY_ACTIVITY_LIST_BY_USER_FIRST_PART = \
         '  SELECT *,' \
@@ -181,5 +181,5 @@ class ActivityQuerys(Enum):
     def get_query_activity_list_by_user_own(cls, user_id):
         user_id = int(user_id).__str__()
         return cls.QUERY_ACTIVITY_LIST_BY_USER_OWN_FIRST_PART.value + \
-               user_id + \
-               cls.QUERY_ACTIVITY_LIST_BY_USER_OWN_SECOND_PART.value
+            user_id + \
+            cls.QUERY_ACTIVITY_LIST_BY_USER_OWN_SECOND_PART.value

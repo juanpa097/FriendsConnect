@@ -61,7 +61,7 @@ class ActivityView(viewsets.ViewSet):
             get_object_or_404(
                 ActivityUser,
                 activity_id=activity.id,
-                user_id= request.user.id
+                user_id=request.user.id
             )
             activity_serializer = ActivitySerializer(activity,
                                                      data=request.data)
@@ -108,9 +108,6 @@ class ActivityView(viewsets.ViewSet):
         )
         return Response(activity_serializer.data,
                         status=status.HTTP_202_ACCEPTED)
-
-
-
 
 
 activity_exact = ActivityView.as_view(dict(get='activity_exact',
