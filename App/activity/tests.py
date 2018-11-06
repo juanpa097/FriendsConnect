@@ -114,6 +114,11 @@ class ActivityTests(APITestCase):
     def test_put_activity(self):
         data = self._get_default_activity()
         activity = Activity.objects.create(**data)
+        ActivityUser.objects.create(
+            user=self.user,
+            activity=activity,
+            rol=0
+        )
         url = reverse('activity_pk', args=(activity.id,))
         data['name'] = "test2"
         data['user_activity_id'] = self.user.id
@@ -124,6 +129,11 @@ class ActivityTests(APITestCase):
     def test_delete_activity(self):
         data = self._get_default_activity()
         activity = Activity.objects.create(**data)
+        ActivityUser.objects.create(
+            user=self.user,
+            activity=activity,
+            rol=0
+        )
         url = reverse('activity_pk', args=(activity.id,))
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -145,6 +155,44 @@ class ActivityTests(APITestCase):
 
     def api_authentication(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+    def test_get_activity_by_username(self):
+        data = self._get_default_activity()
+        activity = Activity.objects.create(**data)
+        activity2 = Activity.objects.create(**data)
+        ActivityUser.objects.create(
+            user=self.user,
+            activity=activity,
+            rol=0
+        )
+        ActivityUser.objects.create(
+            user=self.user,
+            activity=activity2,
+            rol=1
+        )
+        url = reverse('activities_by_username', args=(self.username,))
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+        self.assertEqual(len(response.data), 2)
+
+    def test_get_activity_by_username_own(self):
+        data = self._get_default_activity()
+        activity = Activity.objects.create(**data)
+        activity2 = Activity.objects.create(**data)
+        ActivityUser.objects.create(
+            user=self.user,
+            activity=activity,
+            rol=0
+        )
+        ActivityUser.objects.create(
+            user=self.user,
+            activity=activity2,
+            rol=1
+        )
+        url = reverse('activities_by_username_own', args=(self.username,))
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+        self.assertEqual(len(response.data), 1)
 
     @staticmethod
     def _get_default_activity(

@@ -1,5 +1,7 @@
 import datetime
 
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
@@ -27,7 +29,6 @@ class ActivityView(viewsets.ViewSet):
             activities = Activity.objects.raw(
                 ActivityQuerys.get_query_activity_list(request.user.id)
             )
-            # TODO - capacity of activity, create query
             activity_serializer = ActivitySerializer(
                 activities,
                 many=True,
@@ -57,6 +58,11 @@ class ActivityView(viewsets.ViewSet):
                             status=status.HTTP_202_ACCEPTED)
 
         elif request.method == 'PUT':
+            get_object_or_404(
+                ActivityUser,
+                activity_id=activity.id,
+                user_id= request.user.id
+            )
             activity_serializer = ActivitySerializer(activity,
                                                      data=request.data)
             if activity_serializer.is_valid():
@@ -67,8 +73,44 @@ class ActivityView(viewsets.ViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
         elif request.method == 'DELETE':
+            get_object_or_404(
+                ActivityUser,
+                activity_id=activity.id,
+                user_id=request.user.id
+            )
             activity.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def get_activities_by_username(self, request, username):
+        user = get_object_or_404(User, username=username)
+        activities = Activity.objects.raw(
+            ActivityQuerys.get_query_activity_list_by_user(
+                user.id
+            )
+        )
+        activity_serializer = ActivitySerializer(
+            activities,
+            many=True,
+        )
+        return Response(activity_serializer.data,
+                        status=status.HTTP_202_ACCEPTED)
+
+    def get_activities_by_username_own(self, request, username):
+        user = get_object_or_404(User, username=username)
+        activities = Activity.objects.raw(
+            ActivityQuerys.get_query_activity_list_by_user_own(
+                user.id
+            )
+        )
+        activity_serializer = ActivitySerializer(
+            activities,
+            many=True,
+        )
+        return Response(activity_serializer.data,
+                        status=status.HTTP_202_ACCEPTED)
+
+
+
 
 
 activity_exact = ActivityView.as_view(dict(get='activity_exact',

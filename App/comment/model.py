@@ -20,6 +20,8 @@ class Comment(models.Model):
         Activity,
         on_delete=models.PROTECT,
         related_name='comment',
+        blank=True,
+        null=True
     )
     replies = models.ForeignKey(
         'self',

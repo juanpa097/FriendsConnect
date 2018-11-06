@@ -3,6 +3,7 @@ from django.db.models import Avg
 from rest_framework import status, viewsets
 
 from App.activity.model import Activity, ActivityUser
+from App.activity.view import ActivityView
 from App.image.model import Image
 from App.image.serializer import ImageSerializer
 from App.rate.model import Rate
@@ -74,9 +75,6 @@ class UserViewSet(viewsets.ViewSet):
             status=status.HTTP_200_OK
         )
 
-    def get_activities_by_username(self, request, username):
-        # TODO - not relation activity with user
-        pass
 
     def get_rate_by_username(self, request, username):
         user = get_object_or_404(User, username=username)
@@ -171,8 +169,12 @@ user_by_username = UserViewSet.as_view(dict(
     delete='delete_user_by_username'
 ))
 
-activities_by_username = UserViewSet.as_view(dict(
-    get='get_activites_by_username'
+activities_by_username = ActivityView.as_view(dict(
+    get='get_activities_by_username'
+))
+
+activities_by_username_own = ActivityView.as_view(dict(
+    get='get_activities_by_username_own'
 ))
 
 
