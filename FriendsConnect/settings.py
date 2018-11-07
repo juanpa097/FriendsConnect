@@ -83,9 +83,9 @@ WSGI_APPLICATION = 'FriendsConnect.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DATABASE_NAME', 'mydatabase'),
-        'USER': os.environ.get('DATABASE_USER', 'mydatabaseuser'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'mypassword'),
+        'NAME': os.environ.get('DATABASE_NAME', 'postgres'),
+        'USER': os.environ.get('DATABASE_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
         'HOST': os.environ.get('DATABASE_HOST', '127.0.0.1'),
         'PORT': os.environ.get('DATABASE_PORT', '5432'),
     }
