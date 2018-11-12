@@ -47,7 +47,7 @@ class ImageViewSet(viewsets.ViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    def get(self, request, id):
+    def get(self, request: object, id: object) -> object:
         image = get_object_or_404(Image, id=id)
         image_serializer = ImageSerializer(
             image

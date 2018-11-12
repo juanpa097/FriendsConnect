@@ -25,7 +25,7 @@ class ForgotPasswordView(
         serializer.create(request.data)
         return Response('OK')
 
-    def get(self, request, email):
+    def get(self, request: object, email: object) -> object:
         user = get_object_or_404(User, email=email)
         self.generate_password_reset_code(user)
         return Response('OK')
@@ -36,7 +36,7 @@ class ValidateUserView(
     ValidationCode,
     CodeGenMixin
 ):
-    def get(self, request, username, code):
+    def get(self, request: object, username: object, code: object) -> object:
         self.validate_code(username, code)
         return Response('OK')
 
