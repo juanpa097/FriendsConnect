@@ -200,3 +200,7 @@ user_and_activity_actions = UserViewSet.as_view(dict(
     post='suscribe_to_activity',
     delete='unsuscribe_to_activity'
 ))
+
+validate_user_resend = ValidateUserView.as_view(dict(
+    get='resend_email'
+))

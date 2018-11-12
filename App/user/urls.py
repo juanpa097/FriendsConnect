@@ -29,6 +29,11 @@ urlpatterns = [
         name='rates_by_username'
     ),
     path(
+        'users/<slug:username>/validate',
+        view.validate_user_resend,
+        name='validate_user_resend'
+    ),
+    path(
         'users/<slug:username>/validate/<slug:code>',
         view.validate_user,
         name='validate_user'

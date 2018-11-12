@@ -88,5 +88,11 @@ class ValidateCodeUserTest(APITestCase):
         user = User.objects.get(id=self.user.id)
         self.assertNotEqual(user.profile.rol, -1)
 
+    def test_resend_email(self):
+        url = reverse('validate_user_resend', args=(self.username, ))
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(mail.outbox), 1)
+
     def api_authentication(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)

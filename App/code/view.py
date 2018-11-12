@@ -33,8 +33,14 @@ class ForgotPasswordView(
 
 class ValidateUserView(
     viewsets.ViewSet,
-    ValidationCode
+    ValidationCode,
+    CodeGenMixin
 ):
     def get(self, request, username, code):
         self.validate_code(username, code)
+        return Response('OK')
+
+    def resend_email(self, request, username):
+        user = get_object_or_404(User, username=username)
+        self.generate_user_validate_code(user)
         return Response('OK')
