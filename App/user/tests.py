@@ -160,7 +160,6 @@ class UserTestsNoCredentials(APITestCase):
             "password": "you_know:v",
             "email": "test@test.com",
             "profile": {
-                "rol": 0,
                 "about_me": "--"
             }
         }
