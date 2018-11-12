@@ -74,7 +74,6 @@ class ValidateCodeUserTest(APITestCase):
         self.token = Token.objects.create(user=self.user)
         self.api_authentication()
         profile = {
-            "rol": 1,
             "user_id": self.user.id
         }
         Profile.objects.create(**profile)
@@ -87,7 +86,7 @@ class ValidateCodeUserTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, "OK")
         user = User.objects.get(id=self.user.id)
-        self.assertEqual(user.profile.validate, True)
+        self.assertNotEqual(user.profile.rol, -1)
 
     def api_authentication(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
