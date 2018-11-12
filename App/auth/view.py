@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -13,14 +14,18 @@ class ObtainExpiringAuthToken(ObtainAuthToken):
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
+            user = serializer.validated_data['user']
             token, created = Token.objects.get_or_create(
-                user=serializer.validated_data['user']
+                user=user
             )
 
             if not created:
                 token.created = datetime.utcnow()
                 token.save()
-            response_data = {'token': token.key}
+            response_data = {
+                'token': token.key,
+                'validate': user.profile.rol != -1
+            }
             return Response(
                 response_data,
                 status=status.HTTP_200_OK
@@ -30,6 +35,17 @@ class ObtainExpiringAuthToken(ObtainAuthToken):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    def delete(self, request):
+        token = get_object_or_404(Token, user=request.user)
+        token.delete()
+        return Response(
+            "OK",
+            status=status.HTTP_200_OK
+        )
+
     def get_permissions(self):
         permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
+
+
+auth = ObtainExpiringAuthToken.as_view()
