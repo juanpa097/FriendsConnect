@@ -19,7 +19,7 @@ class ActivityView(viewsets.ViewSet):
         activity_serializer = ActivitySerializer(data=request.data)
         if activity_serializer.is_valid():
             activity_serializer.create(request.data)
-            return Response(activity_serializer.data,
+            return Response("Ok",
                             status=status.HTTP_201_CREATED)
         return Response(activity_serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)

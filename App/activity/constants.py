@@ -10,7 +10,7 @@ class ActivityQuerys(Enum):
         '( ' \
         ' SELECT description, begin_date, end_date, ' \
         ' activity.id, location, ' \
-        '   max_participants, name, imageT.file as image, ' \
+        '   max_participants, name,  ' \
         'userd.username as author, date_created, ' \
         'visibility ' \
         '    FROM "App_activity" as activity ' \
@@ -82,7 +82,7 @@ class ActivityQuerys(Enum):
         '( ' \
         ' SELECT description, begin_date, end_date, ' \
         ' activity.id, location, ' \
-        '   max_participants, name, imageT.file as image, ' \
+        '   max_participants, name, ' \
         'userd.username as author, date_created, ' \
         'visibility ' \
         '    FROM "App_activity" as activity ' \
@@ -143,7 +143,7 @@ class ActivityQuerys(Enum):
         '( ' \
         ' SELECT description, begin_date, end_date, ' \
         ' activity.id, location, ' \
-        '   max_participants, name, imageT.file as image, ' \
+        '   max_participants, name, ' \
         'userd.username as author, date_created, ' \
         'visibility ' \
         '    FROM "App_activity" as activity ' \

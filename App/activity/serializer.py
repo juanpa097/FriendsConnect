@@ -1,3 +1,4 @@
+import base64
 import datetime
 
 import pytz
@@ -14,7 +15,7 @@ class ActivitySerializer(serializers.ModelSerializer):
     max_participants = serializers.IntegerField(min_value=0)
     begin_date = serializers.DateTimeField()
     end_date = serializers.DateTimeField()
-    image = ImageSerializer(required=False)
+    image = serializers.SerializerMethodField(required=False)
     date_created = serializers.DateTimeField(required=False)
     author = serializers.CharField(required=False)
     participants = serializers.IntegerField(required=False)
@@ -50,3 +51,11 @@ class ActivitySerializer(serializers.ModelSerializer):
         if data['end_date'] <= data['begin_date']:
             raise serializers.ValidationError("Date end is < to begin")
         return data
+
+    def get_image(self, obj):
+        if not obj.image:
+            return None
+        complete_path = obj.image.file.path
+        with open(complete_path, "rb") as image_file:
+            str = base64.b64encode(image_file.read())
+        return str
