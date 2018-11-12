@@ -11,5 +11,10 @@ urlpatterns = (
         'activities/<int:activity_id>/image',
         view.image_activity,
         name='image_activity'
+    ),
+    path(
+        'activities/<int:activity_id>/comments',
+        view.comments_by_activity,
+        name='comments_by_activity'
     )
 )

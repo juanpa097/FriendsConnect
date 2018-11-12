@@ -14,14 +14,18 @@ class ObtainExpiringAuthToken(ObtainAuthToken):
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
+            user = serializer.validated_data['user']
             token, created = Token.objects.get_or_create(
-                user=serializer.validated_data['user']
+                user=user
             )
 
             if not created:
                 token.created = datetime.utcnow()
                 token.save()
-            response_data = {'token': token.key}
+            response_data = {
+                'token': token.key,
+                'validate': user.profile.rol != -1
+            }
             return Response(
                 response_data,
                 status=status.HTTP_200_OK

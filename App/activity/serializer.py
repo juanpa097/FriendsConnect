@@ -1,3 +1,4 @@
+import base64
 import datetime
 
 import pytz
@@ -14,15 +15,19 @@ class ActivitySerializer(serializers.ModelSerializer):
     max_participants = serializers.IntegerField(min_value=0)
     begin_date = serializers.DateTimeField()
     end_date = serializers.DateTimeField()
-    image = ImageSerializer(required=False)
+    image = serializers.SerializerMethodField(required=False)
     date_created = serializers.DateTimeField(required=False)
     author = serializers.CharField(required=False)
+    participants = serializers.IntegerField(required=False)
+    comments = serializers.IntegerField(required=False)
+    is_current_user_subscribed = serializers.BooleanField(required=False)
 
     class Meta:
         model = Activity
         fields = ('id', 'name', 'description', 'location', 'begin_date',
                   'end_date', 'max_participants', 'visibility', 'image',
-                  'date_created', 'author')
+                  'date_created', 'author', 'participants', 'comments',
+                  'is_current_user_subscribed')
 
     def create(self, valid_date):
         user_id = valid_date['user']
@@ -47,10 +52,10 @@ class ActivitySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Date end is < to begin")
         return data
 
-
-class ActivityListSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Activity
-        fields = ('id', 'name', 'description', 'location', 'due_date',
-                  'max_participants')
+    def get_image(self, obj):
+        if not obj.image:
+            return None
+        complete_path = obj.image.file.path
+        with open(complete_path, "rb") as image_file:
+            str = base64.b64encode(image_file.read())
+        return str

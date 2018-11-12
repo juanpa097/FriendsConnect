@@ -14,6 +14,11 @@ urlpatterns = [
         name='activities_by_username'
     ),
     path(
+        'users/<slug:username>/activities/own',
+        view.activities_by_username_own,
+        name='activities_by_username_own'
+    ),
+    path(
         'users/<slug:username>/activities/<int:activity_id>',
         view.user_and_activity_actions,
         name='user_and_activity_actions'
@@ -22,6 +27,11 @@ urlpatterns = [
         'users/<slug:username>/rates',
         view.rates_by_username,
         name='rates_by_username'
+    ),
+    path(
+        'users/<slug:username>/validate',
+        view.validate_user_resend,
+        name='validate_user_resend'
     ),
     path(
         'users/<slug:username>/validate/<slug:code>',

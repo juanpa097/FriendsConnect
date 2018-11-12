@@ -3,6 +3,7 @@ from django.db.models import Avg
 from rest_framework import status, viewsets
 
 from App.activity.model import Activity, ActivityUser
+from App.activity.view import ActivityView
 from App.image.model import Image
 from App.image.serializer import ImageSerializer
 from App.rate.model import Rate
@@ -74,10 +75,6 @@ class UserViewSet(viewsets.ViewSet):
             status=status.HTTP_200_OK
         )
 
-    def get_activities_by_username(self, request, username):
-        # TODO - not relation activity with user
-        pass
-
     def get_rate_by_username(self, request, username):
         user = get_object_or_404(User, username=username)
         average_rate = Rate.objects.filter(user_id=user.id).aggregate(Avg(
@@ -101,6 +98,20 @@ class UserViewSet(viewsets.ViewSet):
 
     def suscribe_to_activity(self, request, username, activity_id):
         user, activity = self._get_user_and_activity(username, activity_id)
+        if ActivityUser.objects.filter(user_id=user.id).count() > 0:
+            return Response(
+                "Subscription already made",
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        participants = ActivityUser.objects.filter(
+            activity_id=activity.id
+        ).count()
+        if participants >= activity.max_participants:
+            return Response(
+                "The activity is complete",
+                status=status.HTTP_400_BAD_REQUEST
+            )
         ActivityUser.objects.create(
             user=user,
             activity=activity
@@ -157,8 +168,12 @@ user_by_username = UserViewSet.as_view(dict(
     delete='delete_user_by_username'
 ))
 
-activities_by_username = UserViewSet.as_view(dict(
-    get='get_activites_by_username'
+activities_by_username = ActivityView.as_view(dict(
+    get='get_activities_by_username'
+))
+
+activities_by_username_own = ActivityView.as_view(dict(
+    get='get_activities_by_username_own'
 ))
 
 
@@ -184,4 +199,8 @@ image_user = ImageViewSet.as_view(dict(
 user_and_activity_actions = UserViewSet.as_view(dict(
     post='suscribe_to_activity',
     delete='unsuscribe_to_activity'
+))
+
+validate_user_resend = ValidateUserView.as_view(dict(
+    get='resend_email'
 ))

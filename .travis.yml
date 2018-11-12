@@ -6,8 +6,15 @@ python:
 env:
   - DJANGO=2.1
 
+addons:
+  postgresql: "9.6"
+
+
 install:
   - pip install -r requirements.txt
+
+before_script:
+  - psql -c "CREATE DATABASE travisci;" -U postgres
 
 script:
   - flake8

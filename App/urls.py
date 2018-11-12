@@ -8,4 +8,5 @@ urlpatterns = [
     path('', include('App.auth.urls')),
     path('', include('App.image.urls')),
     path('', include('App.activity.urls')),
+    path('', include('App.comment.urls')),
 ]
