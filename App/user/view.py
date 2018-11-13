@@ -100,7 +100,7 @@ class UserViewSet(viewsets.ViewSet):
         user, activity = self._get_user_and_activity(username, activity_id)
         if ActivityUser.objects.filter(
                 user_id=user.id,
-                id=activity_id
+                activity_id=activity_id
         ).count() > 0:
             return Response(
                 "Subscription already made",
@@ -131,8 +131,15 @@ class UserViewSet(viewsets.ViewSet):
             activity=activity
         )
         relation.delete()
+        participants = ActivityUser.objects.filter(
+            user_id=user.id,
+            activity_id=activity.id
+        ).count()
         return Response(
-            "OK",
+
+            {
+                "participants": participants
+            },
             status=status.HTTP_200_OK
         )
 
