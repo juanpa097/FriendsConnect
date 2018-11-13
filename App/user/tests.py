@@ -68,12 +68,13 @@ class UserTests(APITestCase):
         User.objects.create(**data)
         username = "testsUser"
         url = reverse('user_by_username', args=(username,))
-        data['email'] = 'test@test.tt'
+        data['first_name'] = 'Nnn'
         data.pop("username")
+        data.pop("email")
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         user = User.objects.get(username="testsUser")
-        self.assertEqual(user.email, 'test@test.tt')
+        self.assertEqual(user.first_name, 'Nnn')
 
     def test_get_image_by_username(self):
         # TODO I don't know how make this
