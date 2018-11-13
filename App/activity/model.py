@@ -14,7 +14,7 @@ class Activity(models.Model):
         auto_now_add=True, blank=True
     )
     max_participants = models.IntegerField()
-    visibility = models.BooleanField()
+    visibility = models.BooleanField(default=True)
     users = models.ManyToManyField(
         User,
         related_name='activities',
