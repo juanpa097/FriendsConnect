@@ -132,7 +132,6 @@ class UserViewSet(viewsets.ViewSet):
         )
         relation.delete()
         participants = ActivityUser.objects.filter(
-            user_id=user.id,
             activity_id=activity.id
         ).count()
         return Response(
