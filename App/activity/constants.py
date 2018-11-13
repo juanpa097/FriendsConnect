@@ -77,7 +77,7 @@ class ActivityQuerys(Enum):
         'WHERE activityuser.user_id = '
 
     QUERY_ACTIVITY_LIST_BY_USER_SECOND_PART = \
-        ') as S4 ' \
+        ' AND activityuser.rol != 0 ) as S4 ' \
         'LEFT JOIN ' \
         '( ' \
         ' SELECT description, begin_date, end_date, ' \

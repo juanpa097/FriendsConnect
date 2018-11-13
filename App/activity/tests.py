@@ -173,7 +173,7 @@ class ActivityTests(APITestCase):
         url = reverse('activities_by_username', args=(self.username,))
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(len(response.data), 1)
 
     def test_get_activity_by_username_own(self):
         data = self._get_default_activity()
