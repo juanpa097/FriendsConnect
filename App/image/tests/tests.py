@@ -1,3 +1,5 @@
+import base64
+
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -9,6 +11,7 @@ from datetime import datetime
 import datetime as date
 from App.activity.model import Activity
 from App.activity.tests import ActivityTests
+from App.user.model import Profile
 
 
 class ImageTests(APITestCase):
@@ -17,7 +20,12 @@ class ImageTests(APITestCase):
         self.email = "john@snow.com"
         self.password = "you_know_nothing"
         self.user = User.objects.create_user(self.username, self.email,
-                                             self.password)
+                                             self.password
+                                             )
+        self.profile = Profile.objects.create(
+            user= self.user,
+            about_me="--"
+        )
         self.token = Token.objects.create(user=self.user)
         self.api_authentication()
         self.path = 'App/image/tests/img.png'
@@ -73,6 +81,36 @@ class ImageTests(APITestCase):
         response = self.client.put(url, {'file': image})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Image.objects.count(), 1)
+
+    def test_put_activity_Image_64(self):
+        """
+        Ensure we can update a new image object.
+        """
+
+        activity = self._create_activity()
+        url = reverse('image_activity', args=(activity.id,))
+        with open(self.path, "rb") as image_file:
+            str = base64.b64encode(image_file.read())
+            data = {
+                'image': str
+            }
+            response = self.client.put(url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(Image.objects.count(), 1)
+
+    def test_put_user_Image_64(self):
+        """
+        Ensure we can update a new image object.
+        """
+        url = reverse('image_user', args=(self.username,))
+        with open(self.path, "rb") as image_file:
+            str = base64.b64encode(image_file.read())
+            data = {
+                'image': str
+            }
+            response = self.client.put(url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(Image.objects.count(), 1)
 
     def _create_activity(self):
         return Activity.objects.create(**ActivityTests._get_default_activity())

@@ -8,7 +8,7 @@ urlpatterns = (
     path('activities/', view.activity, name='activity'),
     path('activities/<int:pk>', view.activity_exact, name='activity_pk'),
     path(
-        'activities/<int:activity_id>/image',
+        'activities/<int:activity_id>/images',
         view.image_activity,
         name='image_activity'
     ),

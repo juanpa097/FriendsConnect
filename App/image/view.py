@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from App.activity.model import Activity
 from App.image.model import Image
 from App.image.serializer import ImageSerializer
+from App.user.model import Profile
 
 
 class ImageViewSet(viewsets.ViewSet):
@@ -61,9 +62,14 @@ class ImageViewSet(viewsets.ViewSet):
     def put_user_image(self, request, username):
         # TODO - Delete before image
         user = get_object_or_404(User, username=username)
-        image_serializer = ImageSerializer(data=request.data)
+        profile = get_object_or_404(Profile, user=user)
+        if profile.image:
+            image_serializer = ImageSerializer(profile.image,
+                                               data=request.data)
+        else:
+            image_serializer = ImageSerializer(data=request.data)
         image_serializer.is_valid(raise_exception=True)
-        user.image = image_serializer.save()
+        profile.image = image_serializer.save()
         user.save()
         return Response(
             'ok',
@@ -74,7 +80,11 @@ class ImageViewSet(viewsets.ViewSet):
         # TODO - verify permissions
         # TODO - Delete before image
         activity = get_object_or_404(Activity, id=activity_id)
-        image_serializer = ImageSerializer(data=request.data)
+        if activity.image:
+            image_serializer = ImageSerializer(activity.image,
+                                               data=request.data)
+        else:
+            image_serializer = ImageSerializer(data=request.data)
         image_serializer.is_valid(raise_exception=True)
         activity.image = image_serializer.save()
         activity.save()

@@ -39,7 +39,7 @@ urlpatterns = [
         name='validate_user'
     ),
     path(
-        'users/<slug:username>/image',
+        'users/<slug:username>/images',
         view.image_user,
         name='image_user'
     ),
