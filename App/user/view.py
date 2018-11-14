@@ -58,6 +58,11 @@ class UserViewSet(viewsets.ViewSet):
     def delete_user_by_username(self, request, username):
         # TODO - Verify permissions
         user = get_object_or_404(User, username=username)
+        activities = Activity.objects.filter(
+            activityuser__user_id=user.id,
+            activityuser__rol=0
+        )
+        activities.delete()
         user.delete()
         return Response(
             'User delete',
