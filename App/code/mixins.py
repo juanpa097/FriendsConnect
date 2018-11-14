@@ -1,3 +1,4 @@
+import base64
 import os
 from datetime import datetime, timedelta
 
@@ -9,6 +10,7 @@ from random import randint
 from App.email.constants import EmailTemplates
 from .model import CodeValidate
 from App.email.mixins import EmailThread
+from FriendsConnect.settings import MEDIA_TEMPLATES, LOGO_APP, LOGO_COMPANY
 
 
 class IsExpiredMixin:
@@ -56,11 +58,17 @@ class CodeGenMixin:
     def generate_password_reset_code(self, user):
         code = self._generate_code(user)
         template = EmailTemplates.get_reset_password()
+        pathLogoApp = str(MEDIA_TEMPLATES[0]) + '/' + str(LOGO_APP)
+        pathlogoCompany = str(MEDIA_TEMPLATES[0]) + '/' + str(LOGO_COMPANY)
         data = {
             'code': code,
             'username': user.username,
             'first_name': user.first_name,
-            'last_name': user.last_name
+            'last_name': user.last_name,
+            'logoApp':
+                self.get_image_in_64(pathLogoApp),
+            'logoCompany':
+                self.get_image_in_64(pathlogoCompany)
         }
         EmailThread(
             template=template,
@@ -71,14 +79,25 @@ class CodeGenMixin:
     def generate_user_validate_code(self, user):
         code = self._generate_code(user)
         template = EmailTemplates.get_create_user()
+        pathLogoApp = str(MEDIA_TEMPLATES[0]) + '/' + str(LOGO_APP)
+        pathlogoCompany = str(MEDIA_TEMPLATES[0]) + '/' + str(LOGO_COMPANY)
         data = {
             'code': code,
+            'logoApp':
+                self.get_image_in_64(pathLogoApp),
+            'logoCompany':
+                self.get_image_in_64(pathlogoCompany)
         }
         EmailThread(
             template=template,
             data=data,
             receivers=(user.email,)
         ).run()
+
+    def get_image_in_64(self, path):
+        with open(path, "rb") as image_file:
+            str = base64.b64encode(image_file.read())
+        return str
 
 
 class ValidationCode:

@@ -144,6 +144,9 @@ STATIC_URL = '/static/'
 # Media files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'App/static/media')
 MEDIA_URL = '/media/'
+MEDIA_TEMPLATES = os.path.join(BASE_DIR, "App/email/templates/images"),
+LOGO_APP = 'logoApp.png'
+LOGO_COMPANY = 'logoCompany.jpg'
 
 # Email Credentials
 EMAIL_HOST = environ.get('EMAIL_HOST', 'email_host')
