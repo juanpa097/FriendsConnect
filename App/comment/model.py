@@ -13,19 +13,19 @@ class Comment(models.Model):
     # TODO - verify on delete
     user = models.ForeignKey(
         User,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name='comment',
     )
     activity = models.ForeignKey(
         Activity,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name='comment',
         blank=True,
         null=True
     )
     replies = models.ForeignKey(
         'self',
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name='comment',
         null=True,
         blank=True
