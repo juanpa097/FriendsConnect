@@ -54,7 +54,8 @@ class ActivityQuerys(Enum):
         ' GROUP BY activity.id, activityuser.user_id ' \
         ') as S4 ' \
         'ON ' \
-        'S1.id = S4.id '
+        'S1.id = S4.id ' \
+        'ORDER BY S1.date_created DESC'
 
     @classmethod
     def get_query_activity_list(cls, user_id):
@@ -114,7 +115,8 @@ class ActivityQuerys(Enum):
         '	ON activity.id = commentT.activity_id ' \
         '   GROUP BY activity.id ' \
         ')' \
-        ' as S3 ON S1.id = S3.id '
+        ' as S3 ON S1.id = S3.id '\
+        'ORDER BY S1.date_created DESC'
 
     @classmethod
     def get_query_activity_list_by_user(cls, user_id):
@@ -175,7 +177,8 @@ class ActivityQuerys(Enum):
         '	ON activity.id = commentT.activity_id ' \
         '   GROUP BY activity.id ' \
         ')' \
-        ' as S3 ON S1.id = S3.id '
+        ' as S3 ON S1.id = S3.id '\
+        'ORDER BY S1.date_created DESC'
 
     @classmethod
     def get_query_activity_list_by_user_own(cls, user_id):
