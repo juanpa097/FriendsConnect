@@ -169,4 +169,4 @@ class UserTestsNoCredentials(APITestCase):
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(CodeValidate.objects.count(), 1)
         self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].subject, 'You are welcome')
+        self.assertEqual(mail.outbox[0].subject, 'Welcome to Friends Connect!')

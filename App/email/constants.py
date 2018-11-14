@@ -8,7 +8,7 @@ class EmailTemplates(Enum):
     )
     CREATE_USER = dict(
         path='create_user.html',
-        subject='You are welcome'
+        subject='Welcome to Friends Connect!'
     )
 
     @classmethod
