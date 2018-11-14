@@ -26,7 +26,7 @@ class UserViewSet(viewsets.ViewSet):
         if user_serializer.is_valid():
             user_serializer.create(request.data)
             return Response(
-                user_serializer.data,
+                "Create user ok",
                 status=status.HTTP_201_CREATED
             )
         return Response(

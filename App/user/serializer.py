@@ -9,8 +9,7 @@ from App.code.mixins import CodeGenMixin
 class ProfileSerializer(serializers.ModelSerializer):
     user = serializers.Field(write_only=True, required=False)
     image = serializers.SerializerMethodField(
-        required=False,
-        read_only=True
+        required=False
     )
 
     class Meta:
@@ -26,8 +25,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         return instance
 
     def get_image(self, obj):
-        if type(obj) != type(Profile):
-            return None
         if not obj.image:
             return None
         complete_path = obj.image.file.path
